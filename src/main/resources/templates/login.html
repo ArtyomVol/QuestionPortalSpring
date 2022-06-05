@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+    <link type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{/css/body-defaults.css}" rel="stylesheet"/>
+    <script th:src="@{/js/login.js}"></script>
+    <script th:src="@{/js/node_modules/angular-cookies/angular-cookies.js}"></script>
+</head>
+<body ng-app="Login" ng-controller="LoginController">
+<div class="container-fluid">
+    <div class="row">
+        <div style="width: 37%"></div>
+        <div class="card order-md-1 text-center" style="width: 26%; padding: 2%;">
+            <h4 class="mb-3"><b>LOGO<span style="color: steelblue;">TYPE</span></b></h4>
+            <h5 class="mb-4"><b>Log In</b></h5>
+            <form ng-submit="login()">
+                <div class="mb-2">
+                    <input type="email" class="form-control" ng-model="user.email"
+                           placeholder="Email" required>
+                </div>
+                <div class="mb-2">
+                    <input type="password" class="form-control" ng-model="user.password"
+                           placeholder="Password" required>
+                </div>
+                <div class="row mt-3">
+                    <div class="checkbox mb-3"  style="width: 45%; padding: 0">
+                        <label>
+                            <input type="checkbox" id="remember"> Remember me
+                        </label>
+                    </div>
+                    <div style="width: 50%; padding: 0">
+                        <a href="/" style="color: steelblue; font-size: 0.9rem; text-decoration: none;">
+                            <b>Forgot your password?</b></a>
+                    </div>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit"
+                        style="width: 100%; font-size: 1rem;">LOG IN
+                </button>
+            </form>
+            <div class="row mt-3">
+                <div style="width: 5%"></div>
+                <div style="padding: 0; width: 50%">
+                    <h6 style="margin-bottom: 0; margin-top: 1%"><b>Don't have account?</b></h6>
+                </div>
+                <div style="width: 20%; padding: 0">
+                    <a href="/registration" style="color: steelblue; font-size: 1rem; text-decoration: none;">
+                        <b>Sign Up</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
