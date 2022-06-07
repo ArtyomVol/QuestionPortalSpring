@@ -1,8 +1,8 @@
 package com.softarex.test.volosko.questionportalspring.exception;
 
-public class UserLoginException extends Exception{
+public class UserLoginException extends QuestionPortalException{
     public UserLoginException(){
-        super("Email or password entered incorrectly.");
+        super("Data entered incorrectly.");
     }
 
     public UserLoginException(String msg){

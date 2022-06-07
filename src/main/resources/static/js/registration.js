@@ -18,6 +18,8 @@ app.controller("RegistrationController", function ($scope, $http) {
     $scope.createUser = function () {
         var errorMsg = checkData();
         if (errorMsg === "") {
+            document.getElementById("sign_btn").disabled="true";
+            document.getElementById("loader").style.display = "block";
             $http({
                 method: 'POST',
                 url: '/api/v1/user/create',
@@ -30,6 +32,8 @@ app.controller("RegistrationController", function ($scope, $http) {
                     window.location = "/login";
                 },
                 function (response) {
+                    document.getElementById("sign_btn").removeAttribute("disabled");
+                    document.getElementById("loader").style.display = "none";
                     $scope.message = response.data;
                     alert($scope.message.message);
                 }
@@ -59,7 +63,7 @@ app.controller("RegistrationController", function ($scope, $http) {
             errorMsg += "The length of the last name must be no more then 30 characters.\n";
         }
         var regNumber = new RegExp('^[0-9]+$');
-        if (!regNumber.test($scope.user.phoneNumber)){
+        if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)){
             errorMsg += "The phone number must be consist of only numbers.\n";
         }
         else if ($scope.user.phoneNumber.length > 16) {

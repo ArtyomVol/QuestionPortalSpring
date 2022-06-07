@@ -4,8 +4,9 @@
     <title>Registration</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
     <link type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
-    <link type="text/css" th:href="@{/css/body-defaults.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{/css/body-central.css}" rel="stylesheet"/>
     <link type="text/css" th:href="@{/css/place-holder.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{/css/loader.css}" rel="stylesheet"/>
     <script th:src="@{/js/registration.js}"></script>
 </head>
 <body ng-app="Registration" ng-controller="RegistrationController">
@@ -46,9 +47,11 @@
                     <input type="tel" class="form-control" ng-model="user.phoneNumber"
                            placeholder="Phone Number">
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit"
+                <button class="btn btn-lg btn-primary btn-block" type="submit" id="sign_btn"
                         style="width: 100%; font-size: 1rem;">SIGN UP
                 </button>
+                <div class="loader mt-3" id="loader"
+                     style="margin-left: 42.5%; display: none;"></div>
             </form>
                 <div class="row mt-3">
                     <div style="width: 5%"></div>
