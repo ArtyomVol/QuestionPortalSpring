@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Login</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
-    <link type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
-    <link type="text/css" th:href="@{/css/body-central.css}" rel="stylesheet"/>
-    <script th:src="@{/js/login.js}"></script>
-    <script th:src="@{/js/node_modules/angular-cookies/angular-cookies.js}"></script>
-</head>
-<body ng-app="Login" ng-controller="LoginController">
+<title>Login</title>
+<link rel="stylesheet" href="/css/body-central.css">
 <div class="container-fluid">
     <div class="row">
         <div style="width: 37%"></div>
@@ -45,7 +36,7 @@
                     <h6 style="margin-bottom: 0; margin-top: 1%"><b>Don't have account?</b></h6>
                 </div>
                 <div style="width: 20%; padding: 0">
-                    <a href="/registration" style="color: steelblue; font-size: 1rem; text-decoration: none;">
+                    <a href="/#!/registration" style="color: steelblue; font-size: 1rem; text-decoration: none;">
                         <b>Sign Up</b></a>
                 </div>
             </div>
