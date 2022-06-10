@@ -54,11 +54,11 @@ app.controller("RegistrationController", function ($scope, $http) {
             errorMsg += "Passwords mismatch\n";
             _clearFormData();
         }
-        if ($scope.user.firstName.length > 30) {
-            errorMsg += "The length of the first name must be no more then 30 characters.\n";
+        if ($scope.user.firstName.length > 20) {
+            errorMsg += "The length of the first name must be no more then 20 characters.\n";
         }
-        if ($scope.user.lastName.length > 30) {
-            errorMsg += "The length of the last name must be no more then 30 characters.\n";
+        if ($scope.user.lastName.length > 20) {
+            errorMsg += "The length of the last name must be no more then 20 characters.\n";
         }
         var regNumber = new RegExp('^[0-9]+$');
         if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)){
