@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -21,43 +23,28 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/email", method = RequestMethod.GET, produces = {
-            MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @ResponseBody
-    public User getUserByEmail(@PathVariable("userEmail") String email) throws UserIsMissingException {
-        User user = null;
-        user = userService.getUserByEmail(email);
-        return user;
-    }
-
-    // DEEEEEEEEEEEEEELEEEEEEEEEEEEEET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-    }
-    // DEEEEEEEEEEEEEELEEEEEEEEEEEEEET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> signIn(@RequestBody User user) throws InvalidMailFormatException, UserAlreadyExistsException {
+    public ResponseEntity<?> signIn(@RequestBody User user) throws UserRegistrationException {
         userService.createUser(user);
         return new ResponseEntity<>(new Message("Registration success"), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> logIn(@RequestBody User userData) throws UserLoginException {
+    public ResponseEntity<?> logIn(@RequestBody User userData, HttpServletRequest request) throws UserLoginException {
         User user = userService.getUserByEmailAndPassword(userData.getEmail(), userData.getPassword());
-        return new ResponseEntity<>(new Message("Login success"), HttpStatus.CREATED);
+        request.getSession().setAttribute("user", user);
+        return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
     }
 
-    /*
-    @GetMapping(value = "/email", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserByEmail(@RequestParam(name = "email") String email){
-        User user = userService.getUserByEmail(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }*/
+    @GetMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> logOut(HttpServletRequest request) {
+        request.getSession().setAttribute("user", null);
+        return new ResponseEntity<>(new Message("Logout success"), HttpStatus.IM_USED);
+    }
 
-    @ExceptionHandler(QuestionPortalException.class)
-    public ResponseEntity<?> handleException(QuestionPortalException ex) {
-        return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.NOT_ACCEPTABLE);
+    @GetMapping(value = "/get-user-from-session", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserFromSession(HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("user");
+        return new ResponseEntity<>(user, HttpStatus.IM_USED);
     }
 }

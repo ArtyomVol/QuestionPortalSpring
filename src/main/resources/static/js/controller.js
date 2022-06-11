@@ -13,6 +13,8 @@ app.controller("RegistrationController", function ($scope, $http) {
         message: ""
     };
 
+    _pageLoad();
+
     $scope.createUser = function () {
         var errorMsg = checkData();
         if (errorMsg === "") {
@@ -27,7 +29,7 @@ app.controller("RegistrationController", function ($scope, $http) {
                 }
             }).then(
                 function () {
-                    window.location = "/login";
+                    window.location = "/#!/login";
                 },
                 function (response) {
                     document.getElementById("sign_btn").removeAttribute("disabled");
@@ -70,6 +72,22 @@ app.controller("RegistrationController", function ($scope, $http) {
         return errorMsg;
     }
 
+    function _pageLoad() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/get-user-from-session',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                if (response.data){
+                    window.location = "/#!/main";
+                }
+            }
+        );
+    }
+
     function _clearFormData() {
         $scope.user.password = "";
         $scope.confirmPassword = "";
@@ -77,6 +95,7 @@ app.controller("RegistrationController", function ($scope, $http) {
 });
 
 app.controller("LoginController", function ($scope, $http, $cookies) {
+
     $scope.user = {
         email: "",
         password: "",
@@ -85,7 +104,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
         phoneNumber: ""
     };
 
-    $scope.message = {
+    $scope.errorMessage = {
         message: ""
     };
 
@@ -112,8 +131,8 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                 window.location = "/#!/main";
             },
             function (response) {
-                $scope.message = response.data;
-                alert($scope.message.message);
+                $scope.errorMessage = response.data;
+                alert($scope.errorMessage.message);
                 _clearFormData();
             }
         );
@@ -124,13 +143,70 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
     }
 
     function _pageLoad() {
-        if ($cookies.get('remember') === 'yes') {
-            $scope.user.email = $cookies.get('email');
-            document.getElementById('remember').checked = true;
-        }
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/get-user-from-session',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                if (response.data){
+                    window.location = "/#!/main";
+                }
+                if ($cookies.get('remember') === 'yes') {
+                    $scope.user.email = $cookies.get('email');
+                    document.getElementById('remember').checked = true;
+                }
+            }
+        );
     }
 });
 
 app.controller("MainController", function ($scope, $http) {
+    _pageLoad();
 
+    function _pageLoad() {
+        var user = {
+            email: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            phoneNumber: ""
+        };
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/get-user-from-session',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                if (!response.data){
+                    window.location = "/#!/login";
+                }
+                user = response.data;
+                var userFLName = "";
+                userFLName = user.firstName + " " + user.lastName;
+                if (userFLName === " ") {
+                    userFLName = user.email;
+                }
+                document.getElementById('f_l_name').textContent = userFLName;
+            }
+        );
+    }
+
+    $scope.logout = function () {
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/logout',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function () {
+                window.location = "/#!/login";
+            }
+        );
+    }
 });
