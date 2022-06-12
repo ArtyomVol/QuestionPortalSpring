@@ -1,7 +1,7 @@
 package com.softarex.test.volosko.questionportalspring.exception;
 
-public class UserEditWrongPasswordException extends UserEditException{
-    public UserEditWrongPasswordException() {
+public class UserWrongPasswordException extends UserChangeException {
+    public UserWrongPasswordException() {
         super("Password entered incorrectly.");
     }
 }

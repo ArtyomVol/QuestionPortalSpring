@@ -1,6 +1,5 @@
 package com.softarex.test.volosko.questionportalspring.controller;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.entity.Message;
 import com.softarex.test.volosko.questionportalspring.exception.*;
@@ -37,16 +36,26 @@ public class UserRestController {
         return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/change-user-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/change-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeUserData(@RequestBody User newUserData, HttpServletRequest request) {
         User user = (User)request.getSession().getAttribute("user");
         userService.changeUserData(user, newUserData);
         return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/check-user-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@RequestBody String password, HttpServletRequest request)
+            throws UserWrongPasswordException {
+        User user = (User)request.getSession().getAttribute("user");
+        password = password.substring(1, password.length()-1);
+        userService.deleteUserWithPasswordChecking(user, password);
+        request.getSession().setAttribute("user", null);
+        return new ResponseEntity<>(new Message("User successfully deleted"), HttpStatus.IM_USED);
+    }
+
+    @PostMapping(value = "/check-password", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeUserData(@RequestBody String password, HttpServletRequest request)
-            throws UserEditWrongPasswordException {
+            throws UserWrongPasswordException {
         User user = (User)request.getSession().getAttribute("user");
         password = password.substring(1, password.length()-1);
         userService.checkUserPassword(user, password);

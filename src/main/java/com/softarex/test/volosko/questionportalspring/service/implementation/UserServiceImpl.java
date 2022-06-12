@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -72,11 +71,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkUserPassword(User user, String password) throws UserEditWrongPasswordException {
+    public void checkUserPassword(User user, String password) throws UserWrongPasswordException {
         if (!user.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
-            throw new UserEditWrongPasswordException();
+            throw new UserWrongPasswordException();
         }
-        return true;
+    }
+
+    @Override
+    public void deleteUserWithPasswordChecking(User user, String password) throws UserWrongPasswordException {
+        checkUserPassword(user, password);
+        userRepository.delete(user);
     }
 
 }

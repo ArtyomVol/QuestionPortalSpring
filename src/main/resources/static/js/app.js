@@ -9,6 +9,9 @@ app.config(function ($routeProvider) {
     }).when('/edit_profile', {
         templateUrl: '/template/edit_profile.html',
         controller: 'EditProfileController'
+    }).when('/delete_profile', {
+        templateUrl: '/template/delete_profile.html',
+        controller: 'DeleteProfileController'
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',
