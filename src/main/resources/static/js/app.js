@@ -6,9 +6,9 @@ app.config(function ($routeProvider) {
     }).when('/login', {
         templateUrl: '/template/login.html',
         controller: 'LoginController'
-    }).when('/main', {
-        templateUrl: '/template/main.html',
-        controller: 'MainController'
+    }).when('/edit_profile', {
+        templateUrl: '/template/edit_profile.html',
+        controller: 'EditProfileController'
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',

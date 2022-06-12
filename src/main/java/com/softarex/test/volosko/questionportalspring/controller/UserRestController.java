@@ -1,5 +1,6 @@
 package com.softarex.test.volosko.questionportalspring.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.entity.Message;
 import com.softarex.test.volosko.questionportalspring.exception.*;
@@ -34,6 +35,22 @@ public class UserRestController {
         User user = userService.getUserByEmailAndPassword(userData.getEmail(), userData.getPassword());
         request.getSession().setAttribute("user", user);
         return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/change-user-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeUserData(@RequestBody User newUserData, HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("user");
+        userService.changeUserData(user, newUserData);
+        return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/check-user-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeUserData(@RequestBody String password, HttpServletRequest request)
+            throws UserEditWrongPasswordException {
+        User user = (User)request.getSession().getAttribute("user");
+        password = password.substring(1, password.length()-1);
+        userService.checkUserPassword(user, password);
+        return new ResponseEntity<>(new Message("Password is correct"), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)

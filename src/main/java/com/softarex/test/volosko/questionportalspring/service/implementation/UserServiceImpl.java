@@ -1,10 +1,7 @@
 package com.softarex.test.volosko.questionportalspring.service.implementation;
 
 import com.softarex.test.volosko.questionportalspring.entity.User;
-import com.softarex.test.volosko.questionportalspring.exception.InvalidMailFormatException;
-import com.softarex.test.volosko.questionportalspring.exception.UserAlreadyExistsException;
-import com.softarex.test.volosko.questionportalspring.exception.UserIsMissingException;
-import com.softarex.test.volosko.questionportalspring.exception.UserLoginException;
+import com.softarex.test.volosko.questionportalspring.exception.*;
 import com.softarex.test.volosko.questionportalspring.repository.UserRepository;
 import com.softarex.test.volosko.questionportalspring.service.UserService;
 import com.softarex.test.volosko.questionportalspring.util.EmailDTO;
@@ -32,11 +29,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) throws UserIsMissingException {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserIsMissingException(email));
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 
     @Override
@@ -71,6 +63,20 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         throw new UserLoginException();
+    }
+
+    @Override
+    public void changeUserData(User user, User newUserData) {
+        user.updateData(newUserData, false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean checkUserPassword(User user, String password) throws UserEditWrongPasswordException {
+        if (!user.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
+            throw new UserEditWrongPasswordException();
+        }
+        return true;
     }
 
 }

@@ -62,9 +62,9 @@ app.controller("RegistrationController", function ($scope, $http) {
         if ($scope.user.lastName.length > 20) {
             errorMsg += "The length of the last name must be no more then 20 characters.\n";
         }
-        var regNumber = new RegExp('^[0-9]+$');
+        var regNumber = new RegExp('^(\\+)?[0-9]+$');
         if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)){
-            errorMsg += "The phone number must be consist of only numbers.\n";
+            errorMsg += "The phone number must be consist of only numbers (or + at the beginning).\n";
         }
         else if ($scope.user.phoneNumber.length > 16) {
             errorMsg += "The length of the phone number must be no more then 16 characters.\n";
@@ -82,7 +82,7 @@ app.controller("RegistrationController", function ($scope, $http) {
         }).then(
             function (response) {
                 if (response.data){
-                    window.location = "/#!/main";
+                    window.location = "/#!/edit_profile";
                 }
             }
         );
@@ -128,7 +128,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                     $cookies.put('remember', 'no');
                     $cookies.remove('email');
                 }
-                window.location = "/#!/main";
+                window.location = "/#!/edit_profile";
             },
             function (response) {
                 $scope.errorMessage = response.data;
@@ -152,7 +152,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
         }).then(
             function (response) {
                 if (response.data){
-                    window.location = "/#!/main";
+                    window.location = "/#!/edit_profile";
                 }
                 if ($cookies.get('remember') === 'yes') {
                     $scope.user.email = $cookies.get('email');
@@ -163,17 +163,24 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
     }
 });
 
-app.controller("MainController", function ($scope, $http) {
+app.controller("EditProfileController", function ($scope, $http) {
+    $scope.oldPassword = "";
+
+    $scope.message = {
+        message: ""
+    };
+
+    $scope.user = {
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: ""
+    };
+
     _pageLoad();
 
     function _pageLoad() {
-        var user = {
-            email: "",
-            password: "",
-            firstName: "",
-            lastName: "",
-            phoneNumber: ""
-        };
         $http({
             method: 'GET',
             url: '/api/v1/user/get-user-from-session',
@@ -185,15 +192,82 @@ app.controller("MainController", function ($scope, $http) {
                 if (!response.data){
                     window.location = "/#!/login";
                 }
-                user = response.data;
+                $scope.user = response.data;
+                $scope.user.password = "";
+                $scope.oldPassword = "";
                 var userFLName = "";
-                userFLName = user.firstName + " " + user.lastName;
+                userFLName = $scope.user.firstName + " " + $scope.user.lastName;
                 if (userFLName === " ") {
-                    userFLName = user.email;
+                    userFLName = $scope.user.email;
                 }
                 document.getElementById('f_l_name').textContent = userFLName;
             }
         );
+    }
+
+    $scope.changeUser = function () {
+        var errorMsg = checkData();
+        if (errorMsg === "") {
+            $http({
+                method: 'POST',
+                url: '/api/v1/user/check-user-password',
+                data: angular.toJson($scope.oldPassword),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                function () {
+                    $http({
+                        method: 'POST',
+                        url: '/api/v1/user/change-user-data',
+                        data: angular.toJson($scope.user),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(
+                        function () {
+                            _pageLoad();
+                        },
+                        function (response) {
+                            $scope.message = response.data;
+                            alert($scope.message.message);
+                        }
+                    );
+                },
+                function (response) {
+                    $scope.message = response.data;
+                    alert($scope.message.message);
+                    _clearFormData();
+                }
+            );
+        } else {
+            alert(errorMsg);
+        }
+    }
+
+    function checkData() {
+        var errorMsg = "";
+        if ($scope.user.firstName.length > 20) {
+            errorMsg += "The length of the first name must be no more then 20 characters.\n";
+        }
+        if ($scope.user.lastName.length > 20) {
+            errorMsg += "The length of the last name must be no more then 20 characters.\n";
+        }
+        if ($scope.user.email.length > 256){
+            errorMsg += "The length of the email must be no more than 256 characters.\n";
+        }
+        var regNumber = new RegExp('^(\\+)?[0-9]+$');
+        if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)){
+            errorMsg += "The phone number must be consist of only numbers (or + at the beginning).\n";
+        }
+        else if ($scope.user.phoneNumber.length > 16) {
+            errorMsg += "The length of the phone number must be no more then 16 characters.\n";
+        }
+        if (($scope.user.password.length !== 0) && ($scope.user.password.length < 8 || $scope.user.password.length > 32)) {
+            errorMsg += "The length of the new password must be no less then 8 and no more then 32 characters.\n";
+            _clearFormData();
+        }
+        return errorMsg;
     }
 
     $scope.logout = function () {
@@ -208,5 +282,10 @@ app.controller("MainController", function ($scope, $http) {
                 window.location = "/#!/login";
             }
         );
+    }
+
+    function _clearFormData() {
+        $scope.user.password = "";
+        $scope.oldPassword = "";
     }
 });
