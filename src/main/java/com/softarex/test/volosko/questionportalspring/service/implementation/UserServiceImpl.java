@@ -38,12 +38,7 @@ public class UserServiceImpl implements UserService {
         }
         catch (UserIsMissingException ex){
             EmailDTO emailDTO = new EmailDTO(user.getEmail());
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            emailDTO.InitializeRegistrationMail(user.getPassword());
-            simpleMailMessage.setFrom(emailDTO.getEmailFrom());
-            simpleMailMessage.setTo(emailDTO.getEmailTo());
-            simpleMailMessage.setText(emailDTO.getMessage());
-            simpleMailMessage.setSubject(emailDTO.getMailSubject());
+            SimpleMailMessage simpleMailMessage = emailDTO.InitializeRegistrationMail(user.getPassword());
             try{
                 javaMailSender.send(simpleMailMessage);
             }
@@ -81,6 +76,8 @@ public class UserServiceImpl implements UserService {
     public void deleteUserWithPasswordChecking(User user, String password) throws UserWrongPasswordException {
         checkUserPassword(user, password);
         userRepository.delete(user);
+        EmailDTO emailDTO = new EmailDTO(user.getEmail());
+        SimpleMailMessage simpleMailMessage = emailDTO.InitializeDeletingMail();
+        javaMailSender.send(simpleMailMessage);
     }
-
 }

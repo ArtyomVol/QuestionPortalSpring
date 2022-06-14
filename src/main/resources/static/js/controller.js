@@ -118,7 +118,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
             }
         }).then(
             function () {
-                var remember = document.getElementById('remember').checked = true;
+                var remember = document.getElementById('remember').checked === true;
                 if (remember) {
                     $cookies.put('remember', 'yes');
                     $cookies.put('email', $scope.user.email);
@@ -318,6 +318,8 @@ app.controller("DeleteProfileController", function ($scope, $http) {
     }
 
     $scope.deleteUser = function () {
+        document.getElementById("delete_btn").disabled = "true";
+        document.getElementById("loader").style.display = "block";
         $http({
             method: 'POST',
             url: '/api/v1/user/delete',
@@ -330,6 +332,8 @@ app.controller("DeleteProfileController", function ($scope, $http) {
                 window.location = "/#!/login";
             },
             function (response) {
+                document.getElementById("delete_btn").removeAttribute("disabled");
+                document.getElementById("loader").style.display = "none";
                 $scope.message = response.data;
                 alert($scope.message.message);
                 _clearFormData();
