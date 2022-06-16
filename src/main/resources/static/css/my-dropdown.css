@@ -6,16 +6,12 @@
     cursor: pointer;
 }
 
-.dropa::after {
-    content: " \23F7";
-}
-
-.dropdown {
+.my-dropdown {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-content {
+.my-dropdown-content {
     display: none;
     position: absolute;
     background-color: white;
@@ -27,21 +23,32 @@
     border-radius: 4px;
 }
 
-.dropdown-content a {
+.my-dropdown::after {
+    content: " \23F7";
+    margin-left: auto;
+    margin-right: 0;
+    color: lightgray;
+}
+
+.my-dropdown-content a {
     color: black;
     padding: 6px 10px;
     text-decoration: none;
     display: block;
 }
 
-.dropdown-content a:hover {
+.my-dropdown-content a:hover {
     background-color: #f1f1f1
 }
 
-.dropdown:hover .dropdown-content {
+.my-dropdown:hover .my-dropdown-content {
     display: block;
 }
 
-.dropdown:hover .dropa {
+.my-dropdown:hover .dropa {
+    color: steelblue;
+}
+
+.my-dropdown:hover:after {
     color: steelblue;
 }

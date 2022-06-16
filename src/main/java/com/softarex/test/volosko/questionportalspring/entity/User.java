@@ -10,15 +10,11 @@ import java.nio.charset.StandardCharsets;
 @Setter
 @NoArgsConstructor
 @Entity
-//хз класс является объектной моделью таблицы в БД
 @Table(name = "\"user\"")
-// связывание класс с таблице в БД
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    // указали (+ стратегия для гена) генератор, которой будет использоваться + обозвали
     @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
-    // создаём генератор + берём инфу о нём из БД (начальное значение)
     @Column(name = "id")
     @Setter(value = AccessLevel.PRIVATE)
     private Long id;

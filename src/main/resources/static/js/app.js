@@ -12,8 +12,11 @@ app.config(function ($routeProvider) {
     }).when('/delete_profile', {
         templateUrl: '/template/delete_profile.html',
         controller: 'DeleteProfileController'
+    }).when('/your_questions', {
+        templateUrl: '/template/your_questions.html',
+        controller: 'YourQuestionsController'
     }).otherwise({
-        redirectTo: '/login',
-        controller: 'LoginController',
-        templateUrl: '/template/login.html',});
+        redirectTo: '/your_questions',
+        controller: 'YourQuestionsController',
+        templateUrl: '/template/your_questions.html',});
 });

@@ -45,8 +45,8 @@ app.controller("RegistrationController", function ($scope, $http) {
 
     function checkData() {
         var errorMsg = "";
-        if ($scope.user.email.length > 256) {
-            errorMsg += "The length of the email must be no more than 256 characters.\n";
+        if ($scope.user.email.length > 36) {
+            errorMsg += "The length of the email must be no more than 36 characters.\n";
         }
         if ($scope.user.password.length < 8 || $scope.user.password.length > 32) {
             errorMsg += "The length of the password must be no less then 8 and no more then 32 characters.\n"
@@ -80,7 +80,7 @@ app.controller("RegistrationController", function ($scope, $http) {
         }).then(
             function (response) {
                 if (response.data) {
-                    window.location = "/#!/edit_profile";
+                    window.location = "/#!/your_questions";
                 }
             }
         );
@@ -126,7 +126,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                     $cookies.put('remember', 'no');
                     $cookies.remove('email');
                 }
-                window.location = "/#!/edit_profile";
+                window.location = "/#!/your_questions";
             },
             function (response) {
                 $scope.errorMessage = response.data;
@@ -150,7 +150,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
         }).then(
             function (response) {
                 if (response.data) {
-                    window.location = "/#!/edit_profile";
+                    window.location = "/#!/your_questions";
                 }
                 if ($cookies.get('remember') === 'yes') {
                     $scope.user.email = $cookies.get('email');
@@ -250,8 +250,8 @@ app.controller("EditProfileController", function ($scope, $http) {
         if ($scope.user.lastName.length > 20) {
             errorMsg += "The length of the last name must be no more then 20 characters.\n";
         }
-        if ($scope.user.email.length > 256) {
-            errorMsg += "The length of the email must be no more than 256 characters.\n";
+        if ($scope.user.email.length > 36) {
+            errorMsg += "The length of the email must be no more than 36 characters.\n";
         }
         var regNumber = new RegExp('^(\\+)?[0-9]+$');
         if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)) {
@@ -357,5 +357,167 @@ app.controller("DeleteProfileController", function ($scope, $http) {
 
     function _clearFormData() {
         $scope.password = "";
+    }
+});
+
+app.controller("YourQuestionsController", function ($scope, $http) {
+    $scope.email = "";
+    $scope.forUserPoints = "";
+
+    $scope.message = {
+        message: ""
+    };
+
+    $scope.questions = [];
+    $scope.answerTypes = [];
+    $scope.otherUsers = [];
+
+    $scope.selectedUserEmail = "";
+    $scope.selectedAnswerType = "";
+    $scope.question = "";
+    $scope.options = "";
+
+    _pageLoad();
+
+    function _pageLoad() {
+        _get_user_from_session();
+        _get_questions();
+        _get_answer_types();
+        _get_all_other_users();
+    }
+
+    $scope.logout = function () {
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/logout',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function () {
+                window.location = "/#!/login";
+            }
+        );
+    }
+
+    $scope.replace_selected_user_email = function (selectedUserEmail){
+        let current_text = document.getElementById("forUser");
+        let new_text = document.getElementById(selectedUserEmail);
+        $scope.selectedUserEmail = selectedUserEmail;
+        current_text.style.fontSize = new_text.style.fontSize;
+        current_text.style.paddingRight = new_text.style.paddingRight;
+    }
+
+    $scope.replace_selected_answer_type = function (selectedAnswerType){
+        let current_text = document.getElementById("answerType");
+        let new_text = document.getElementById(selectedAnswerType);
+        $scope.selectedAnswerType = selectedAnswerType;
+        current_text.style.fontSize = new_text.style.fontSize;
+        current_text.style.paddingRight = new_text.style.paddingRight;
+    }
+
+    $scope.adjust_other_users_and_answer_types_text = function () {
+        adjust_other_users_text();
+        adjust_answer_type_text();
+        let _text_size_test_parent = document.getElementById("body-container-fluid");
+        _text_size_test_parent.removeChild(_text_size_test);
+    }
+
+    function adjust_answer_type_text(){
+        let _text_size_test = document.getElementById("text-size-test");
+        angular.forEach($scope.answerTypes, function (answerType, key) {
+            _adjust_text_size(answerType.type, answerType.type, _text_size_test);
+        });
+    }
+
+    function adjust_other_users_text(){
+        let _text_size_test = document.getElementById("text-size-test");
+        angular.forEach($scope.otherUsers, function (otherUser, key) {
+            _adjust_text_size(otherUser.email, otherUser.email, _text_size_test);
+        });
+    }
+
+    function _get_user_from_session() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/get-user-from-session',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                if (!response.data) {
+                    window.location = "/#!/login";
+                }
+                var user = response.data;
+                var userFLName = user.firstName + " " + user.lastName;
+                if (userFLName === " ") {
+                    userFLName = user.email;
+                }
+                $scope.email = user.email;
+                document.getElementById('f_l_name').textContent = userFLName;
+            }
+        );
+    }
+
+    function _get_questions() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/question/get_questions_from_session_user',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                $scope.questions = response.data;
+            }
+        );
+    }
+
+    function _get_all_other_users() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/user/get-all-other-users',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                $scope.otherUsers = response.data;
+                $scope.selectedUserEmail = $scope.otherUsers[0].email;
+                let _text_size_test = document.getElementById("text-size-test");
+                _adjust_text_size("forUser", $scope.otherUsers[0].email, _text_size_test);
+            }
+        );
+    }
+
+    function _adjust_text_size(text_id, text, _text_size_test) {
+        let _text = document.getElementById(text_id);
+        _text_size_test.innerHTML = text;
+        let font_size = _text.style.fontSize.substring(0, _text.style.fontSize.length - 2);
+        _text_size_test.style.fontSize = font_size + "px";
+        while(_text_size_test.offsetWidth>209) {
+            font_size--;
+            _text_size_test.style.fontSize = font_size + "px";
+        }
+        _text.style.fontSize = font_size + "px";
+        _text.style.paddingRight = (209 - _text_size_test.offsetWidth) + "px";
+    }
+
+    function _get_answer_types() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/answer-type/get-all',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                $scope.answerTypes = response.data;
+                $scope.selectedAnswerType = $scope.answerTypes[0].type;
+                let _text_size_test = document.getElementById("text-size-test");
+                _adjust_text_size("answerType", $scope.answerTypes[0].type, _text_size_test);
+            }
+        );
     }
 });

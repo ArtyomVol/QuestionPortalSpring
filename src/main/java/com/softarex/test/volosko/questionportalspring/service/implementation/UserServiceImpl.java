@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -79,5 +80,10 @@ public class UserServiceImpl implements UserService {
         EmailDTO emailDTO = new EmailDTO(user.getEmail());
         SimpleMailMessage simpleMailMessage = emailDTO.InitializeDeletingMail();
         javaMailSender.send(simpleMailMessage);
+    }
+
+    @Override
+    public List<User> getAllOtherUsers(User currentUser) {
+        return userRepository.getAllByEmailIsNot(currentUser.getEmail());
     }
 }

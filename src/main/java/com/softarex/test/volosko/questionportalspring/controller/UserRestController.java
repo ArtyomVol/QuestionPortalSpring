@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -72,5 +73,12 @@ public class UserRestController {
     public ResponseEntity<?> getUserFromSession(HttpServletRequest request) {
         User user = (User)request.getSession().getAttribute("user");
         return new ResponseEntity<>(user, HttpStatus.IM_USED);
+    }
+
+    @GetMapping(value = "/get-all-other-users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllOtherUsers(HttpServletRequest request) {
+        User curentUser = (User)request.getSession().getAttribute("user");
+        List<User> otherUsers = userService.getAllOtherUsers(curentUser);
+        return new ResponseEntity<>(otherUsers, HttpStatus.IM_USED);
     }
 }

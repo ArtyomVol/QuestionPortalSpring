@@ -1,0 +1,49 @@
+package com.softarex.test.volosko.questionportalspring.entity;
+
+import lombok.*;
+
+import javax.persistence.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name="question")
+public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_seq")
+    @SequenceGenerator(name = "question_seq", sequenceName = "question_id_seq", allocationSize = 1)
+    @Column(name = "id")
+    @Setter(value = AccessLevel.PRIVATE)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "from_user", nullable = false)
+    private User fromUser;
+
+    @ManyToOne
+    @JoinColumn(name = "for_user", nullable = false)
+    private User forUser;
+
+    @Column(name = "question_text", nullable = false)
+    private String questionText;
+
+    @ManyToOne
+    @JoinColumn(name = "answer_type_id", nullable = false)
+    private AnswerType answerType;
+
+    @Column(name = "answer_options")
+    private String answerOptions;
+
+    @Column(name = "answer")
+    private String answer;
+
+    public Question(User fromUser, User forUser, String questionText, AnswerType answerType, String answerOptions, String answer) {
+        this.fromUser = fromUser;
+        this.forUser = forUser;
+        this.questionText = questionText;
+        this.answerType = answerType;
+        this.answerOptions = answerOptions;
+        this.answer = answer;
+    }
+}
