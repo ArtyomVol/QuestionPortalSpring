@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-1" style="width: 17%;margin-left: 62%;">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"
-                            ng-click="adjust_other_users_and_answer_types_text()"
+                            ng-click="adjustOtherUsersAndAnswerTypesText()"
                             style="width: 100%;font-size: 1rem; padding: 2px; padding-right: 10%"><span
                             style="font-weight: bold; font-size: 20px; line-height: 0">+ </span>Add question
                     </button>
@@ -50,84 +50,97 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="row" style="margin-bottom: 4px;">
-                                        <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
-                                            <p class="mb-1"
-                                               style="color: darkgray;margin-left: 25px;margin-bottom: 0px;margin-top: 4px;">
-                                                For user <span style="color: darkred">*</span></p>
-                                        </div>
-                                        <div class="col-1 btn"
-                                             style="padding: 0;width: 50%; border-color:lightgray; border:1px;margin-left: 6px;">
-                                            <button class="btn dropdown-toggle new ng-binding" type="button"
-                                                    id="dropdownMenuButtonForUser" data-bs-toggle="dropdown"
-                                                    aria-expanded="false" style="width: 100%; border-color: lightgray;
+                                <form ng-submit="addQuestion()"
+                                      class="ng-pristine ng-invalid ng-invalid-required ng-valid">
+                                    <div class="modal-body">
+                                        <div class="row" style="margin-bottom: 4px;">
+                                            <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
+                                                <p class="mb-1"
+                                                   style="color: darkgray;margin-left: 25px;margin-bottom: 0px;margin-top: 4px;">
+                                                    For user <span style="color: darkred">*</span></p>
+                                            </div>
+                                            <div class="col-1 btn"
+                                                 style="padding: 0;width: 50%; border-color:lightgray; border:1px;margin-left: 6px;">
+                                                <button class="btn dropdown-toggle new ng-binding" type="button"
+                                                        id="dropdownMenuButtonForUser" data-bs-toggle="dropdown"
+                                                        aria-expanded="false" style="width: 100%; border-color: lightgray;
                                                     padding-left: 8px; padding-top: 4px; padding-bottom: 4px;
                                                     "><span style="font-size: 16px; padding-right: 0px;" id="forUser">
                                                 {{ selectedUserEmail }}</span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonForUser"
-                                                style="width: 49.2%;">
-                                                <li><button class="dropdown-item" style="padding-left: 8px;
-                                                font-size: 16px; padding-right: 0px" ng-click="replace_selected_user_email(otherUser.email)"
-                                                       id="{{ otherUser.email }}"
-                                                       ng-repeat="otherUser in otherUsers">
-                                                    {{ otherUser.email }}</button></li>
-                                            </ul>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonForUser"
+                                                    style="width: 49.2%;">
+                                                    <li>
+                                                        <button class="dropdown-item" style="padding-left: 8px;
+                                                font-size: 16px; padding-right: 0px"
+                                                                ng-click="replaceSelectedUserEmail(otherUser.email)"
+                                                                id="{{ otherUser.email }}"
+                                                                ng-repeat="otherUser in otherUsers">
+                                                            {{ otherUser.email }}
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row" style="margin-bottom: 4px;">
-                                        <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
-                                            <p class="mb-1"
-                                               style="color: darkgray;margin-left: 18px;margin-bottom: 0px;margin-top: 4px;">
-                                                Question <span style="color: darkred">*</span></p>
+                                        <div class="row" style="margin-bottom: 4px;">
+                                            <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
+                                                <p class="mb-1"
+                                                   style="color: darkgray;margin-left: 18px;margin-bottom: 0px;margin-top: 4px;">
+                                                    Question <span style="color: darkred">*</span></p>
+                                            </div>
+                                            <input type="text" class="form-control" ng-model="question" required=""
+                                                   style="width: 50%;margin-left: 6px; height: 34px">
                                         </div>
-                                        <input type="text" class="form-control" ng-model="question" required=""
-                                               style="width: 50%;margin-left: 6px; height: 34px">
-                                    </div>
-                                    <div class="row" style="margin-bottom: 4px;">
-                                        <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
-                                            <p class="mb-1"
-                                               style="color: darkgray;font-size: 1rem;margin-top: 4px;margin-bottom: 0px;">
-                                                Answer type<span style="color: darkred">*</span></p>
-                                        </div>
-                                        <div class="col-1 btn"
-                                             style="padding: 0;width: 50%; border-color:lightgray; border:1px;margin-left: 6px;">
-                                            <button class="btn dropdown-toggle new ng-binding" type="button"
-                                                    id="dropdownMenuButtonAnswerType" data-bs-toggle="dropdown"
-                                                    aria-expanded="false" style="width: 100%; border-color: lightgray;
+                                        <div class="row" style="margin-bottom: 4px;">
+                                            <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
+                                                <p class="mb-1"
+                                                   style="color: darkgray;font-size: 1rem;margin-top: 4px;margin-bottom: 0px;">
+                                                    Answer type<span style="color: darkred">*</span></p>
+                                            </div>
+                                            <div class="col-1 btn"
+                                                 style="padding: 0;width: 50%; border-color:lightgray; border:1px;margin-left: 6px;">
+                                                <button class="btn dropdown-toggle new ng-binding" type="button"
+                                                        id="dropdownMenuButtonAnswerType" data-bs-toggle="dropdown"
+                                                        aria-expanded="false" style="width: 100%; border-color: lightgray;
                                                     padding-left: 8px; padding-top: 4px; padding-bottom: 4px;">
                                                     <span style="font-size: 16px; padding-right: 0px;" id="answerType">
                                             {{ selectedAnswerType }}</span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonAnswerType"
-                                                style="width: 49.2%;">
-                                                <li><button class="dropdown-item" style="padding-left: 8px;
-                                                font-size: 16px; padding-right: 0px" ng-click="replace_selected_answer_type(answerType.type)"
-                                                            id="{{ answerType.type }}"
-                                                            ng-repeat="answerType in answerTypes">
-                                                    {{ answerType.type }}</button></li>
-                                            </ul>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonAnswerType"
+                                                    style="width: 49.2%;">
+                                                    <li>
+                                                        <button class="dropdown-item" style="padding-left: 8px;
+                                                font-size: 16px; padding-right: 0px"
+                                                                ng-click="replaceSelectedAnswerType(answerType.type)"
+                                                                id="{{ answerType.type }}"
+                                                                ng-repeat="answerType in answerTypes">
+                                                            {{ answerType.type }}
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-bottom: 4px;">
+                                            <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
+                                                <p class="mb-1"
+                                                   style="color: darkgray;margin-left: 18px;margin-bottom: 0px;margin-top: 4px;">
+                                                    Options <span style="color: darkred">*</span></p>
+                                            </div>
+                                            <textarea type="text" class="form-control" ng-model="options" required
+                                                      style="width: 50%;margin-left: 6px; height: 34px"></textarea>
                                         </div>
                                     </div>
-                                    <div class="row" style="margin-bottom: 4px;">
-                                        <div class="col-1" style="width: 20%;padding-left: 2px;padding-right: 0px;">
-                                            <p class="mb-1"
-                                               style="color: darkgray;margin-left: 18px;margin-bottom: 0px;margin-top: 4px;">
-                                                Options <span style="color: darkred">*</span></p>
-                                        </div>
-                                        <textarea type="text" class="form-control" ng-model="options" required
-                                                  style="width: 50%;margin-left: 6px; height: 34px"></textarea>
+                                    <div class="modal-footer" style="background-color: #fafafa">
+                                        <button type="button" class="btn" data-bs-dismiss="modal"
+                                                style="font-weight: bold">
+                                            CANCEL
+                                        </button>
+                                        <button class="btn btn-primary" type="submit"
+                                                style="padding: 3px 20px 3px 20px ">
+                                            SAVE
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="modal-footer" style="background-color: #fafafa">
-                                    <button type="button" class="btn" data-bs-dismiss="modal" style="font-weight: bold">
-                                        CANCEL
-                                    </button>
-                                    <button type="button" class="btn btn-primary" style="padding: 3px 20px 3px 20px ">
-                                        SAVE
-                                    </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
