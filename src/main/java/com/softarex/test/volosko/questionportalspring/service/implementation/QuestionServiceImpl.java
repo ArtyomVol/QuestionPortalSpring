@@ -22,4 +22,9 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getQuestionsByFromUser(User fromUser) {
         return questionRepository.getQuestionsByFromUser(fromUser);
     }
+
+    @Override
+    public void createQuestion(Question question) {
+        questionRepository.save(question);
+    }
 }

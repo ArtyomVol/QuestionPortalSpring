@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuestionService {
     public List<Question> getQuestionsByFromUser(User fromUser);
+
+    public void createQuestion(Question question);
 }

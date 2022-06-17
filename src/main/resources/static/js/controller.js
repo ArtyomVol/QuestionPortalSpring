@@ -361,8 +361,8 @@ app.controller("DeleteProfileController", function ($scope, $http) {
 });
 
 app.controller("YourQuestionsController", function ($scope, $http) {
-    $scope.email = "";
     $scope.forUserPoints = "";
+    $scope.user;
 
     $scope.message = {
         message: ""
@@ -449,12 +449,11 @@ app.controller("YourQuestionsController", function ($scope, $http) {
                 if (!response.data) {
                     window.location = "/#!/login";
                 }
-                var user = response.data;
-                var userFLName = user.firstName + " " + user.lastName;
+                $scope.user = response.data;
+                var userFLName = $scope.user.firstName + " " + $scope.user.lastName;
                 if (userFLName === " ") {
-                    userFLName = user.email;
+                    userFLName = $scope.user.email;
                 }
-                $scope.email = user.email;
                 document.getElementById('f_l_name').textContent = userFLName;
             }
         );
@@ -517,6 +516,30 @@ app.controller("YourQuestionsController", function ($scope, $http) {
                 $scope.selectedAnswerType = $scope.answerTypes[0].type;
                 let _text_size_test = document.getElementById("text-size-test");
                 adjustTextSize("answerType", $scope.answerTypes[0].type, _text_size_test);
+            }
+        );
+    }
+
+    $scope.addQuestion = function (){
+        let newQuestion = {
+            fromUser: $scope.user,
+            forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
+            questionText: $scope.question,
+            answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
+            answerOptions: $scope.options,
+            answer: ""
+        };
+        $http({
+            method: 'POST',
+            url: '/api/v1/question/create',
+            data: angular.toJson(newQuestion),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                alert(response.data.message);
+                document.getElementById("myModal").close();
             }
         );
     }
