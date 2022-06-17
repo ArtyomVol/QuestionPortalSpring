@@ -27,4 +27,9 @@ public class QuestionServiceImpl implements QuestionService {
     public void createQuestion(Question question) {
         questionRepository.save(question);
     }
+
+    @Override
+    public void deleteQuestion(Question question) {
+        questionRepository.delete(question);
+    }
 }

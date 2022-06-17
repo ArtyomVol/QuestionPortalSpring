@@ -360,7 +360,7 @@ app.controller("DeleteProfileController", function ($scope, $http) {
     }
 });
 
-app.controller("YourQuestionsController", function ($scope, $http) {
+app.controller("YourQuestionsController", function ($scope, $http, $route) {
     $scope.forUserPoints = "";
     $scope.user;
 
@@ -540,6 +540,22 @@ app.controller("YourQuestionsController", function ($scope, $http) {
             function (response) {
                 alert(response.data.message);
                 document.getElementById("myModal").close();
+            }
+        );
+    }
+
+    $scope.deleteQuestion = function (question) {
+        $http({
+            method: 'POST',
+            url: '/api/v1/question/delete',
+            data: angular.toJson(question),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function () {
+                // ВРЕМЕННО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $route.reload();
             }
         );
     }

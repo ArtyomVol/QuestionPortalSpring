@@ -36,4 +36,10 @@ public class QuestionRestController {
         questionService.createQuestion(question);
         return new ResponseEntity<>(new Message("Question is successfully created"), HttpStatus.CREATED);
     }
+
+    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteQuestion(@RequestBody Question question) {
+        questionService.deleteQuestion(question);
+        return new ResponseEntity<>(new Message("Question is successfully deleted"), HttpStatus.CREATED);
+    }
 }
