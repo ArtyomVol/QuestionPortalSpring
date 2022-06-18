@@ -11,4 +11,6 @@ public interface QuestionService {
     void createQuestion(Question question);
 
     void deleteQuestion(Question question);
+
+    void editQuestion(Question question);
 }

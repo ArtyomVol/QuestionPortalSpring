@@ -42,4 +42,10 @@ public class QuestionRestController {
         questionService.deleteQuestion(question);
         return new ResponseEntity<>(new Message("Question is successfully deleted"), HttpStatus.CREATED);
     }
+
+    @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> editQuestion(@RequestBody Question question) {
+        questionService.editQuestion(question);
+        return new ResponseEntity<>(new Message("Question is successfully edited"), HttpStatus.CREATED);
+    }
 }

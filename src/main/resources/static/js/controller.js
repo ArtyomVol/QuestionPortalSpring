@@ -374,67 +374,151 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
 
     $scope.selectedUserEmail = "";
     $scope.selectedAnswerType = "";
-    $scope.question = "";
+    $scope.questionText = "";
     $scope.options = "";
+
+    $scope.questionForEdit = [];
 
     pageLoad();
 
     function pageLoad() {
         getUserFromSession();
-        getQuestions();
-        getAnswerTypes();
-        getAllOtherUsers();
     }
 
-    $scope.logout = function () {
+    $scope.replaceSelectedUserEmailOnQuestionAdd = function (selectedUserEmail){
+        let currentText = document.getElementById("forUserOnQuestionAdd");
+        let newText = document.getElementById(selectedUserEmail);
+        $scope.selectedUserEmail = selectedUserEmail;
+        currentText.style.fontSize = newText.style.fontSize;
+        currentText.style.paddingRight = newText.style.paddingRight;
+    }
+
+    $scope.replaceSelectedUserEmailOnQuestionEdit = function (selectedUserEmail){
+        let currentText = document.getElementById("forUserOnQuestionEdit");
+        let newText = document.getElementById(selectedUserEmail + "Edit");
+        $scope.questionForEdit.forUser =
+            $scope.otherUsers.find(u => u.email === selectedUserEmail);
+        currentText.style.fontSize = newText.style.fontSize;
+        currentText.style.paddingRight = newText.style.paddingRight;
+    }
+
+    $scope.replaceSelectedAnswerTypeOnQuestionAdd = function (selectedAnswerType){
+        let currentText = document.getElementById("answerTypeOnQuestionAdd");
+        let newText = document.getElementById(selectedAnswerType);
+        $scope.selectedAnswerType = selectedAnswerType;
+        currentText.style.fontSize = newText.style.fontSize;
+        currentText.style.paddingRight = newText.style.paddingRight;
+    }
+
+    $scope.replaceSelectedAnswerTypeOnQuestionEdit = function (selectedAnswerType){
+        let currentText = document.getElementById("answerTypeOnQuestionEdit");
+        let newText = document.getElementById(selectedAnswerType + "Edit");
+        $scope.questionForEdit.answerType =
+            $scope.answerTypes.find(a => a.type === selectedAnswerType);
+        currentText.style.fontSize = newText.style.fontSize;
+        currentText.style.paddingRight = newText.style.paddingRight;
+    }
+
+    $scope.adjustAddQuestionText = function () {
+        let textSizeTest = document.getElementById("text-size-test");
+        adjustTextSize("forUserOnQuestionAdd", $scope.selectedUserEmail, textSizeTest);
+        adjustTextSize("answerTypeOnQuestionAdd", $scope.selectedAnswerType, textSizeTest);
+        adjustOtherUsersText("", textSizeTest);
+        adjustAnswerTypeText("", textSizeTest);
+    }
+
+    $scope.adjustEditQuestionText = function (question) {
+        $scope.questionForEdit = angular.copy(question);
+        let textSizeTest = document.getElementById("text-size-test");
+        adjustTextSize("forUserOnQuestionEdit", $scope.questionForEdit.forUser.email, textSizeTest);
+        adjustTextSize("answerTypeOnQuestionEdit", $scope.questionForEdit.answerType.type, textSizeTest);
+        adjustOtherUsersText("Edit", textSizeTest);
+        adjustAnswerTypeText("Edit", textSizeTest);
+    }
+
+    function adjustAnswerTypeText(textIdAfter, textSizeTest){
+        angular.forEach($scope.answerTypes, function (answerType, key) {
+            adjustTextSize(answerType.type + textIdAfter, answerType.type, textSizeTest);
+        });
+    }
+
+    function adjustOtherUsersText(textIdAfter, textSizeTest){
+        angular.forEach($scope.otherUsers, function (otherUser, key) {
+            adjustTextSize(otherUser.email + textIdAfter, otherUser.email, textSizeTest);
+        });
+    }
+
+    function adjustTextSize(textId, text, textSizeTest) {
+        let textElement = document.getElementById(textId);
+        textSizeTest.innerHTML = text;
+        let fontSize = 16;
+        textSizeTest.style.fontSize = fontSize + "px";
+        while(textSizeTest.offsetWidth>209) {
+            fontSize--;
+            textSizeTest.style.fontSize = fontSize + "px";
+        }
+        textElement.style.fontSize = fontSize + "px";
+        textElement.style.paddingRight = (209 - textSizeTest.offsetWidth) + "px";
+    }
+
+    $scope.addQuestion = function (){
+        let newQuestion = {
+            fromUser: $scope.user,
+            forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
+            questionText: $scope.questionText,
+            answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
+            answerOptions: $scope.options,
+            answer: ""
+        };
         $http({
-            method: 'GET',
-            url: '/api/v1/user/logout',
+            method: 'POST',
+            url: '/api/v1/question/create',
+            data: angular.toJson(newQuestion),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                alert(response.data.message);
+                closeModal();
+                // ВРЕМЕННО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $route.reload();
+            }
+        );
+    }
+
+    $scope.editQuestion = function (){
+        $http({
+            method: 'POST',
+            url: '/api/v1/question/edit',
+            data: angular.toJson($scope.questionForEdit),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                alert(response.data.message);
+                closeModal();
+                // ВРЕМЕННО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $route.reload();
+            }
+        );
+    }
+
+    $scope.deleteQuestion = function (question) {
+        $http({
+            method: 'POST',
+            url: '/api/v1/question/delete',
+            data: angular.toJson(question),
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(
             function () {
-                window.location = "/#!/login";
+                // ВРЕМЕННО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $route.reload();
             }
         );
-    }
-
-    $scope.replaceSelectedUserEmail = function (selectedUserEmail){
-        let current_text = document.getElementById("forUser");
-        let new_text = document.getElementById(selectedUserEmail);
-        $scope.selectedUserEmail = selectedUserEmail;
-        current_text.style.fontSize = new_text.style.fontSize;
-        current_text.style.paddingRight = new_text.style.paddingRight;
-    }
-
-    $scope.replaceSelectedAnswerType = function (selectedAnswerType){
-        let current_text = document.getElementById("answerType");
-        let new_text = document.getElementById(selectedAnswerType);
-        $scope.selectedAnswerType = selectedAnswerType;
-        current_text.style.fontSize = new_text.style.fontSize;
-        current_text.style.paddingRight = new_text.style.paddingRight;
-    }
-
-    $scope.adjustOtherUsersAndAnswerTypesText = function () {
-        adjustOtherUsersText();
-        adjustAnswerTypeText();
-        let _text_size_test_parent = document.getElementById("body-container-fluid");
-        _text_size_test_parent.removeChild(_text_size_test);
-    }
-
-    function adjustAnswerTypeText(){
-        let _text_size_test = document.getElementById("text-size-test");
-        angular.forEach($scope.answerTypes, function (answerType, key) {
-            adjustTextSize(answerType.type, answerType.type, _text_size_test);
-        });
-    }
-
-    function adjustOtherUsersText(){
-        let _text_size_test = document.getElementById("text-size-test");
-        angular.forEach($scope.otherUsers, function (otherUser, key) {
-            adjustTextSize(otherUser.email, otherUser.email, _text_size_test);
-        });
     }
 
     function getUserFromSession() {
@@ -449,12 +533,18 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
                 if (!response.data) {
                     window.location = "/#!/login";
                 }
-                $scope.user = response.data;
-                var userFLName = $scope.user.firstName + " " + $scope.user.lastName;
-                if (userFLName === " ") {
-                    userFLName = $scope.user.email;
+                else {
+                    $scope.user = response.data;
+                    let userFLName = $scope.user.firstName + " " + $scope.user.lastName;
+                    if (userFLName === " ") {
+                        userFLName = $scope.user.email;
+                    }
+                    document.getElementById('f_l_name').textContent = userFLName;
+                    $scope.canGoNext = true;
+                    getQuestions();
+                    getAnswerTypes();
+                    getAllOtherUsers();
                 }
-                document.getElementById('f_l_name').textContent = userFLName;
             }
         );
     }
@@ -484,23 +574,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             function (response) {
                 $scope.otherUsers = response.data;
                 $scope.selectedUserEmail = $scope.otherUsers[0].email;
-                let _text_size_test = document.getElementById("text-size-test");
-                adjustTextSize("forUser", $scope.otherUsers[0].email, _text_size_test);
             }
         );
-    }
-
-    function adjustTextSize(text_id, text, _text_size_test) {
-        let _text = document.getElementById(text_id);
-        _text_size_test.innerHTML = text;
-        let font_size = _text.style.fontSize.substring(0, _text.style.fontSize.length - 2);
-        _text_size_test.style.fontSize = font_size + "px";
-        while(_text_size_test.offsetWidth>209) {
-            font_size--;
-            _text_size_test.style.fontSize = font_size + "px";
-        }
-        _text.style.fontSize = font_size + "px";
-        _text.style.paddingRight = (209 - _text_size_test.offsetWidth) + "px";
     }
 
     function getAnswerTypes() {
@@ -514,49 +589,27 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             function (response) {
                 $scope.answerTypes = response.data;
                 $scope.selectedAnswerType = $scope.answerTypes[0].type;
-                let _text_size_test = document.getElementById("text-size-test");
-                adjustTextSize("answerType", $scope.answerTypes[0].type, _text_size_test);
             }
         );
     }
 
-    $scope.addQuestion = function (){
-        let newQuestion = {
-            fromUser: $scope.user,
-            forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
-            questionText: $scope.question,
-            answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
-            answerOptions: $scope.options,
-            answer: ""
-        };
+    $scope.logout = function () {
         $http({
-            method: 'POST',
-            url: '/api/v1/question/create',
-            data: angular.toJson(newQuestion),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(
-            function (response) {
-                alert(response.data.message);
-                document.getElementById("myModal").close();
-            }
-        );
-    }
-
-    $scope.deleteQuestion = function (question) {
-        $http({
-            method: 'POST',
-            url: '/api/v1/question/delete',
-            data: angular.toJson(question),
+            method: 'GET',
+            url: '/api/v1/user/logout',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(
             function () {
-                // ВРЕМЕННО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                $route.reload();
+                window.location = "/#!/login";
             }
         );
+    }
+
+    function closeModal() {
+        let parent = document.getElementsByClassName("vsc-initialized modal-open")[0];
+        let child = document.getElementsByClassName("modal-backdrop fade show")[0];
+        parent.removeChild(child);
     }
 });
