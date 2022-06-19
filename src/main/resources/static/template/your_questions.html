@@ -359,12 +359,32 @@
                         </li>
                         <li class="page-item" id="nextPageParent">
                             <button class="page-link" id="nextPage" ng-click="paginationClick('nextPage')"
-                               style="font-size: 24px; padding: 0 6px 0 6px;">▸</button>
+                                    style="font-size: 24px; padding: 0 6px 0 6px;">▸
+                            </button>
                         </li>
                     </ul>
                 </div>
-                <div class="col-1">
-                    <input type="number" style="width: 36px;">
+                <div class="col-1" style="padding-right: 30px; width: 9.5%; padding-left: 0px;">
+                    <button class="btn dropdown-toggle new ng-binding" type="button"
+                            ng-click="adjustQuestionsPerPageText()"
+                            id="dropdownMenuButtonChooseQuestionsPerPage" data-bs-toggle="dropdown"
+                            aria-expanded="false" style="width: 100%; border-color: lightgray;
+                            padding-left: 8px; padding-top: 4px; padding-bottom: 4px;">
+                        <span style="font-size: 16px; padding-right: 0px;" id="questionsPerPage">
+                                            {{ questionsPerPage }}</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonChooseQuestionsPerPage"
+                        style="width: 6%; min-width:6%;">
+                        <li>
+                            <button class="dropdown-item"
+                                    style="padding-left: 8px; font-size: 16px; padding-right: 0px;"
+                                    ng-click="replaceSelectedQuestionsPerPage(questionsPerPageOption)"
+                                    id="{{ questionsPerPageOption + 'QuestionsPerPage' }}" type="button"
+                                    ng-repeat="questionsPerPageOption in questionsPerPageOptions">
+                                {{ questionsPerPageOption }}
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

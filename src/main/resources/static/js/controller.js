@@ -379,7 +379,9 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
 
     $scope.questionForEdit = [];
 
-    $scope.questionsPerPage = 2;
+    $scope.questionsPerPageOptions = ["1", "2", "5", "10", "25", "50", "100", "All"];
+
+    $scope.questionsPerPage = 5;
     $scope.questionsCount = 0;
     $scope.paginationInfo= "";
 
@@ -397,6 +399,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
 
     function pageLoad() {
         getUserFromSession();
+        let textSizeTest = document.getElementById("text-size-test");
+        adjustTextSize("questionsPerPage", $scope.questionsPerPage, textSizeTest, 26);
     }
 
     $scope.replaceSelectedUserEmailOnQuestionAdd = function (selectedUserEmail) {
@@ -414,6 +418,15 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             $scope.otherUsers.find(u => u.email === selectedUserEmail);
         currentText.style.fontSize = newText.style.fontSize;
         currentText.style.paddingRight = newText.style.paddingRight;
+    }
+
+    $scope.replaceSelectedQuestionsPerPage = function (questionsPerPageOption) {
+        let currentText = document.getElementById("questionsPerPage");
+        let newText = document.getElementById(questionsPerPageOption + "QuestionsPerPage");
+        $scope.questionsPerPage = questionsPerPageOption;
+        currentText.style.fontSize = newText.style.fontSize;
+        currentText.style.paddingRight = newText.style.paddingRight;
+        getQuestionsCount("currentPage");
     }
 
     $scope.replaceSelectedAnswerTypeOnQuestionAdd = function (selectedAnswerType) {
@@ -435,8 +448,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
 
     $scope.adjustAddQuestionText = function () {
         let textSizeTest = document.getElementById("text-size-test");
-        adjustTextSize("forUserOnQuestionAdd", $scope.selectedUserEmail, textSizeTest);
-        adjustTextSize("answerTypeOnQuestionAdd", $scope.selectedAnswerType, textSizeTest);
+        adjustTextSize("forUserOnQuestionAdd", $scope.selectedUserEmail, textSizeTest, 209);
+        adjustTextSize("answerTypeOnQuestionAdd", $scope.selectedAnswerType, textSizeTest, 209);
         adjustOtherUsersText("", textSizeTest);
         adjustAnswerTypeText("", textSizeTest);
     }
@@ -444,35 +457,42 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
     $scope.adjustEditQuestionText = function (question) {
         $scope.questionForEdit = angular.copy(question);
         let textSizeTest = document.getElementById("text-size-test");
-        adjustTextSize("forUserOnQuestionEdit", $scope.questionForEdit.forUser.email, textSizeTest);
-        adjustTextSize("answerTypeOnQuestionEdit", $scope.questionForEdit.answerType.type, textSizeTest);
+        adjustTextSize("forUserOnQuestionEdit", $scope.questionForEdit.forUser.email, textSizeTest, 209);
+        adjustTextSize("answerTypeOnQuestionEdit", $scope.questionForEdit.answerType.type, textSizeTest, 209);
         adjustOtherUsersText("Edit", textSizeTest);
         adjustAnswerTypeText("Edit", textSizeTest);
     }
 
     function adjustAnswerTypeText(textIdAfter, textSizeTest) {
-        angular.forEach($scope.answerTypes, function (answerType, key) {
-            adjustTextSize(answerType.type + textIdAfter, answerType.type, textSizeTest);
+        angular.forEach($scope.answerTypes, function (answerType) {
+            adjustTextSize(answerType.type + textIdAfter, answerType.type, textSizeTest, 209);
         });
     }
 
     function adjustOtherUsersText(textIdAfter, textSizeTest) {
-        angular.forEach($scope.otherUsers, function (otherUser, key) {
-            adjustTextSize(otherUser.email + textIdAfter, otherUser.email, textSizeTest);
+        angular.forEach($scope.otherUsers, function (otherUser) {
+            adjustTextSize(otherUser.email + textIdAfter, otherUser.email, textSizeTest, 209);
         });
     }
 
-    function adjustTextSize(textId, text, textSizeTest) {
+    $scope.adjustQuestionsPerPageText = function () {
+        let textSizeTest = document.getElementById("text-size-test");
+        angular.forEach($scope.questionsPerPageOptions, function (option) {
+            adjustTextSize(option + "QuestionsPerPage", option, textSizeTest, 26);
+        });
+    }
+
+    function adjustTextSize(textId, text, textSizeTest, necessaryWidth) {
         let textElement = document.getElementById(textId);
         textSizeTest.innerHTML = text;
         let fontSize = 16;
         textSizeTest.style.fontSize = fontSize + "px";
-        while (textSizeTest.offsetWidth > 209) {
+        while (textSizeTest.offsetWidth > necessaryWidth) {
             fontSize--;
             textSizeTest.style.fontSize = fontSize + "px";
         }
         textElement.style.fontSize = fontSize + "px";
-        textElement.style.paddingRight = (209 - textSizeTest.offsetWidth) + "px";
+        textElement.style.paddingRight = (necessaryWidth - textSizeTest.offsetWidth) + "px";
     }
 
     $scope.addQuestion = function () {
@@ -621,6 +641,11 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         let lastPage = document.getElementById("lastPage");
         let nextPage = document.getElementById("nextPage");
         let nextPageParent = document.getElementById("nextPageParent");
+        let questionsIsAll = false;
+        if ($scope.questionsPerPage === "All") {
+            $scope.questionsPerPage = $scope.questionsCount;
+            questionsIsAll = true;
+        }
         let pagesCount = Math.ceil($scope.questionsCount / $scope.questionsPerPage);
         if ($scope.questionsCount === 0) {
             modifyPaginationIfQuestionsCountIsZero(previousPageParent, nextPageParent, firstPage, pagesBefore,
@@ -640,6 +665,9 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             Math.min($scope.pagesNums.currentPage * $scope.questionsPerPage, $scope.questionsCount);
         $scope.paginationInfo = firstQuestionId + "-" + lastQuestionId + " of " + $scope.questionsCount;
         getQuestions();
+        if (questionsIsAll) {
+            $scope.questionsPerPage = "All";
+        }
     }
 
     function setPaginationNums(buttonId, pagesCount) {
