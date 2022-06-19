@@ -2,6 +2,7 @@ package com.softarex.test.volosko.questionportalspring.service.implementation;
 
 import com.softarex.test.volosko.questionportalspring.entity.Question;
 import com.softarex.test.volosko.questionportalspring.entity.User;
+import com.softarex.test.volosko.questionportalspring.exception.UserIsNotAuthorizedException;
 import com.softarex.test.volosko.questionportalspring.repository.QuestionRepository;
 import com.softarex.test.volosko.questionportalspring.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestionsByFromUser(User fromUser) {
+    public List<Question> getQuestionsByFromUser(User fromUser) throws UserIsNotAuthorizedException {
+        if (fromUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
         return questionRepository.getQuestionsByFromUser(fromUser);
     }
 
@@ -39,14 +43,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum) {
+    public List<Question> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum)
+            throws UserIsNotAuthorizedException {
+        if (fromUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
         int offset = (pageNum - 1) * questionsPerPage;
         return questionRepository.getQuestionsByFromUserIdWithLimitAndOffset(fromUser.getId(),
                 questionsPerPage, offset);
     }
 
     @Override
-    public int getQuestionsByFromUserCount(User fromUser) {
+    public int getQuestionsByFromUserCount(User fromUser) throws UserIsNotAuthorizedException {
+        if (fromUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
         return questionRepository.getQuestionsByFromUserCount(fromUser.getId());
     }
 }

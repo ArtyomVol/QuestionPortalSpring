@@ -502,6 +502,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
     }
 
     $scope.editQuestion = function () {
+        $scope.questionForEdit.answer = "";
         $http({
             method: 'POST',
             url: '/api/v1/question/edit',
@@ -578,6 +579,10 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         }).then(
             function (response) {
                 $scope.questions = response.data;
+            },
+            function (response) {
+                alert(response.data.message);
+                window.location = "/#!/login";
             }
         );
     }
@@ -594,6 +599,10 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             function (response) {
                 $scope.questionsCount = response.data;
                 modifyPagination(buttonId);
+            },
+            function (response) {
+                alert(response.data.message);
+                window.location = "/#!/login";
             }
         );
     }

@@ -4,6 +4,7 @@ import com.softarex.test.volosko.questionportalspring.entity.Message;
 import com.softarex.test.volosko.questionportalspring.entity.Question;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.exception.UserIsMissingException;
+import com.softarex.test.volosko.questionportalspring.exception.UserIsNotAuthorizedException;
 import com.softarex.test.volosko.questionportalspring.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,8 @@ public class QuestionRestController {
     }
 
     @GetMapping(value = "/get_questions_from_session_user/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request) {
+    public ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request)
+            throws UserIsNotAuthorizedException {
         User user = (User) request.getSession().getAttribute("user");
         List<Question> questions = questionService.getQuestionsByFromUser(user);
         return new ResponseEntity<>(questions, HttpStatus.OK);
@@ -34,14 +36,16 @@ public class QuestionRestController {
     @GetMapping(value = "/get_questions_from_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<?>> getQuestionsFromSessionUser(
             @RequestParam(name = "questions_per_page") int questionsPerPage,
-            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request) {
+            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request)
+            throws UserIsNotAuthorizedException {
         User user = (User) request.getSession().getAttribute("user");
         List<Question> questions = questionService.getQuestionsByFromUserWithPagination(user, questionsPerPage, pageNum);
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
     @GetMapping(value = "/get_questions_from_session_user_count", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getQuestionsFromSessionUserCount(HttpServletRequest request) {
+    public ResponseEntity<?> getQuestionsFromSessionUserCount(HttpServletRequest request)
+            throws UserIsNotAuthorizedException {
         User user = (User) request.getSession().getAttribute("user");
         int questionsCount = questionService.getQuestionsByFromUserCount(user);
         return new ResponseEntity<>(questionsCount, HttpStatus.OK);
