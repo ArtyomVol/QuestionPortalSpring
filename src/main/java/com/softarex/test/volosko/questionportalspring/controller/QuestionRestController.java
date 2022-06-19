@@ -24,11 +24,27 @@ public class QuestionRestController {
         this.questionService = questionService;
     }
 
-    @GetMapping(value = "/get_questions_from_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<?>> getQuestionsFromSessionUser(HttpServletRequest request) throws UserIsMissingException {
-        User user = (User)request.getSession().getAttribute("user");
+    @GetMapping(value = "/get_questions_from_session_user/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
         List<Question> questions = questionService.getQuestionsByFromUser(user);
         return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get_questions_from_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<?>> getQuestionsFromSessionUser(
+            @RequestParam(name = "questions_per_page") int questionsPerPage,
+            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        List<Question> questions = questionService.getQuestionsByFromUserWithPagination(user, questionsPerPage, pageNum);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get_questions_from_session_user_count", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getQuestionsFromSessionUserCount(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        int questionsCount = questionService.getQuestionsByFromUserCount(user);
+        return new ResponseEntity<>(questionsCount, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)

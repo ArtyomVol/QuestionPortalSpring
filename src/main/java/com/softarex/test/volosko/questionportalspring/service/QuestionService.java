@@ -13,4 +13,8 @@ public interface QuestionService {
     void deleteQuestion(Question question);
 
     void editQuestion(Question question);
+
+    List<Question> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum);
+
+    int getQuestionsByFromUserCount(User fromUser);
 }

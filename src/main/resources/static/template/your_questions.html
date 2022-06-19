@@ -152,7 +152,7 @@
                 </div>
             </div>
             <div class="row" style="width: 99%; padding-left: 3%">
-                <form ng-submit="editQuestion()">
+                <form ng-submit="editQuestion()" style="padding: 0px;">
                     <table class="table table-striped">
                         <thead style="border-top-width: 1px;">
                         <tr>
@@ -302,6 +302,69 @@
                         </tbody>
                     </table>
                 </form>
+            </div>
+            <div class="row" style="padding-left: 1.5%;">
+                <div class="col-1" style="width: auto">
+                    <span>{{paginationInfo}}</span>
+                </div>
+                <div class="col-1" style="width: auto; margin-left: auto; margin-right:auto;">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" id="previousPageParent">
+                            <button class="page-link" id="previousPage" ng-click="paginationClick('previousPage')"
+                                    style="font-size: 24px; padding: 0 6px 0 6px;">◂
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="firstPage" ng-click="paginationClick('firstPage')">
+                                {{pagesNums.firstPage}}
+                            </button>
+                        </li>
+                        <li class="page-item disabled">
+                            <button class="page-link" id="pagesBefore">...</button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="pageBeforeBefore"
+                                    ng-click="paginationClick('pageBeforeBefore')">
+                                {{pagesNums.pageBeforeBefore}}
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="pageBefore" ng-click="paginationClick('pageBefore')">
+                                {{pagesNums.pageBefore}}
+                            </button>
+                        </li>
+                        <li class="page-item active">
+                            <button class="page-link" id="currentPage" ng-click="paginationClick('currentPage')">
+                                {{pagesNums.currentPage}}
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="pageAfter" ng-click="paginationClick('pageAfter')">
+                                {{pagesNums.pageAfter}}
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="pageAfterAfter" ng-click="paginationClick('pageAfterAfter')">
+                                {{pagesNums.pageAfterAfter}}
+                            </button>
+                        </li>
+                        <li class="page-item disabled">
+                            <button class="page-link" id="pagesAfter">...</button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link" id="lastPage" ng-click="paginationClick('lastPage')">
+                                {{pagesNums.lastPage}}
+                            </button>
+                        </li>
+                        <li class="page-item" id="nextPageParent">
+                            <button class="page-link" id="nextPage" ng-click="paginationClick('nextPage')"
+                               style="font-size: 24px; padding: 0 6px 0 6px;">▸</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-1">
+                    <input type="number" style="width: 36px;">
+                </div>
             </div>
         </div>
     </div>

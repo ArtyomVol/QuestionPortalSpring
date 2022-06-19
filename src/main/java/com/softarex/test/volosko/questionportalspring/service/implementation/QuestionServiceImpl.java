@@ -37,4 +37,16 @@ public class QuestionServiceImpl implements QuestionService {
     public void editQuestion(Question question) {
         questionRepository.save(question);
     }
+
+    @Override
+    public List<Question> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum) {
+        int offset = (pageNum - 1) * questionsPerPage;
+        return questionRepository.getQuestionsByFromUserIdWithLimitAndOffset(fromUser.getId(),
+                questionsPerPage, offset);
+    }
+
+    @Override
+    public int getQuestionsByFromUserCount(User fromUser) {
+        return questionRepository.getQuestionsByFromUserCount(fromUser.getId());
+    }
 }
