@@ -663,6 +663,9 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         let firstQuestionId = ($scope.pagesNums.currentPage - 1) * $scope.questionsPerPage + 1;
         let lastQuestionId =
             Math.min($scope.pagesNums.currentPage * $scope.questionsPerPage, $scope.questionsCount);
+        if (lastQuestionId === 0) {
+            firstQuestionId = 0;
+        }
         $scope.paginationInfo = firstQuestionId + "-" + lastQuestionId + " of " + $scope.questionsCount;
         getQuestions();
         if (questionsIsAll) {
