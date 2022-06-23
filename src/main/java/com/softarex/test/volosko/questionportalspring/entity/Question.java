@@ -1,6 +1,9 @@
 package com.softarex.test.volosko.questionportalspring.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name="question")
+@Table(name = "question")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_seq")
@@ -17,18 +20,18 @@ public class Question {
     @Setter(value = AccessLevel.PRIVATE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user", nullable = false)
     private User fromUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "for_user", nullable = false)
     private User forUser;
 
     @Column(name = "question_text", nullable = false)
     private String questionText;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "answer_type_id", nullable = false)
     private AnswerType answerType;
 
@@ -38,7 +41,19 @@ public class Question {
     @Column(name = "answer")
     private String answer;
 
-    public Question(User fromUser, User forUser, String questionText, AnswerType answerType, String answerOptions, String answer) {
+    public Question(long id, User fromUser, User forUser, String questionText, AnswerType answerType,
+                    String answerOptions, String answer) {
+        this.id = id;
+        this.fromUser = fromUser;
+        this.forUser = forUser;
+        this.questionText = questionText;
+        this.answerType = answerType;
+        this.answerOptions = answerOptions;
+        this.answer = answer;
+    }
+
+    public Question(User fromUser, User forUser, String questionText, AnswerType answerType, String answerOptions,
+                    String answer) {
         this.fromUser = fromUser;
         this.forUser = forUser;
         this.questionText = questionText;

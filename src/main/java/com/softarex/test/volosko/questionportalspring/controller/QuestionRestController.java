@@ -1,13 +1,7 @@
 package com.softarex.test.volosko.questionportalspring.controller;
 
-import com.softarex.test.volosko.questionportalspring.entity.Message;
-import com.softarex.test.volosko.questionportalspring.entity.Question;
-import com.softarex.test.volosko.questionportalspring.entity.User;
-import com.softarex.test.volosko.questionportalspring.exception.UserIsMissingException;
-import com.softarex.test.volosko.questionportalspring.exception.UserIsNotAuthorizedException;
-import com.softarex.test.volosko.questionportalspring.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.softarex.test.volosko.questionportalspring.entity.dto.QuestionDto;
+import com.softarex.test.volosko.questionportalspring.service.rest.QuestionRestService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,56 +10,38 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/question")
+@RequestMapping("/api/v1/questions")
 public class QuestionRestController {
-    private final QuestionService questionService;
-
-    @Autowired
-    public QuestionRestController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
 
     @GetMapping(value = "/get_questions_from_session_user/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request)
-            throws UserIsNotAuthorizedException {
-        User user = (User) request.getSession().getAttribute("user");
-        List<Question> questions = questionService.getQuestionsByFromUser(user);
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+    public ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request) {
+        return QuestionRestService.getAllQuestionsFromSessionUser(request);
     }
 
     @GetMapping(value = "/get_questions_from_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<?>> getQuestionsFromSessionUser(
             @RequestParam(name = "questions_per_page") int questionsPerPage,
-            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request)
-            throws UserIsNotAuthorizedException {
-        User user = (User) request.getSession().getAttribute("user");
-        List<Question> questions = questionService.getQuestionsByFromUserWithPagination(user, questionsPerPage, pageNum);
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request) {
+        return QuestionRestService.getQuestionsFromSessionUser(questionsPerPage, pageNum, request);
     }
 
-    @GetMapping(value = "/get_questions_from_session_user_count", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getQuestionsFromSessionUserCount(HttpServletRequest request)
-            throws UserIsNotAuthorizedException {
-        User user = (User) request.getSession().getAttribute("user");
-        int questionsCount = questionService.getQuestionsByFromUserCount(user);
-        return new ResponseEntity<>(questionsCount, HttpStatus.OK);
+    @GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCountOfQuestionsFromSessionUser(HttpServletRequest request) {
+        return QuestionRestService.getCountOfQuestionsFromSessionUser(request);
     }
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createQuestion(@RequestBody Question question) {
-        questionService.createQuestion(question);
-        return new ResponseEntity<>(new Message("Question is successfully created"), HttpStatus.CREATED);
+    public ResponseEntity<?> createQuestion(@RequestBody QuestionDto question) {
+        return QuestionRestService.createQuestion(question);
     }
 
-    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteQuestion(@RequestBody Question question) {
-        questionService.deleteQuestion(question);
-        return new ResponseEntity<>(new Message("Question is successfully deleted"), HttpStatus.CREATED);
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteQuestion(@PathVariable long id) {
+        return QuestionRestService.deleteQuestion(id);
     }
 
-    @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> editQuestion(@RequestBody Question question) {
-        questionService.editQuestion(question);
-        return new ResponseEntity<>(new Message("Question is successfully edited"), HttpStatus.CREATED);
+    @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> editQuestion(@RequestBody QuestionDto question) {
+        return QuestionRestService.editQuestion(question);
     }
 }

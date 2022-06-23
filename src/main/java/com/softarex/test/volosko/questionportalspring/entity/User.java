@@ -1,10 +1,11 @@
 package com.softarex.test.volosko.questionportalspring.entity;
 
-import lombok.*;
-import org.springframework.util.DigestUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.nio.charset.StandardCharsets;
 
 @Getter
 @Setter
@@ -43,29 +44,10 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void updateData(User newUserData, boolean isPasswordEncrypted) {
-        email = newUserData.email;
-        if (!newUserData.password.equals("")) {
-            if (isPasswordEncrypted) {
-                password = newUserData.password;
-            } else {
-                password = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
-            }
-        }
-        firstName = newUserData.firstName;
-        lastName = newUserData.lastName;
-        phoneNumber = newUserData.phoneNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+    public User(String email, String firstName, String lastName, String phoneNumber) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 }

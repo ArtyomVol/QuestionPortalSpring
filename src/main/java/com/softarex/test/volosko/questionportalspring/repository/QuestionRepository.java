@@ -10,9 +10,10 @@ import java.util.List;
 public interface QuestionRepository extends CrudRepository<Question, Long> {
     List<Question> getQuestionsByFromUser(User user);
 
-    @Query (value = "SELECT * FROM question WHERE from_user = :fromUserId ORDER BY id LIMIT :limit OFFSET :offset", nativeQuery = true)
+    @Query(value = "SELECT * FROM question WHERE from_user = :fromUserId ORDER BY id LIMIT :limit OFFSET :offset", nativeQuery = true)
     List<Question> getQuestionsByFromUserIdWithLimitAndOffset(long fromUserId, int limit, int offset);
 
-    @Query (value = "SELECT COUNT(*) FROM question WHERE from_user = :fromUserId", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE from_user = :fromUserId", nativeQuery = true)
     int getQuestionsByFromUserCount(long fromUserId);
+
 }

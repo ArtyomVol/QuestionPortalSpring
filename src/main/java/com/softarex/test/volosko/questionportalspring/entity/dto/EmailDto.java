@@ -1,22 +1,23 @@
-package com.softarex.test.volosko.questionportalspring.util;
+package com.softarex.test.volosko.questionportalspring.entity.dto;
 
 import com.softarex.test.volosko.questionportalspring.constants.EmailConstants;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.mail.SimpleMailMessage;
 
 @Getter
 @Setter
-public class EmailDTO {
+public class EmailDto {
     private String emailTo;
     private String emailFrom;
     private String message;
     private String mailSubject;
 
-    public EmailDTO(String emailTo) {
+    public EmailDto(String emailTo) {
         this.emailTo = emailTo;
     }
 
-    public SimpleMailMessage InitializeRegistrationMail(String password) {
+    public SimpleMailMessage initializeRegistrationMail(String password) {
         emailFrom = EmailConstants.EMAIL_FROM_ADDRESS;
         message = EmailConstants.REGISTRATION_MESSAGE.replaceFirst("§1§", emailTo).
                 replaceFirst("§2§", password);
@@ -26,7 +27,7 @@ public class EmailDTO {
         return simpleMailMessage;
     }
 
-    public SimpleMailMessage InitializeDeletingMail() {
+    public SimpleMailMessage initializeDeletingMail() {
         emailFrom = EmailConstants.EMAIL_FROM_ADDRESS;
         message = EmailConstants.PROFILE_DELETING_MESSAGE;
         mailSubject = EmailConstants.PROFILE_DELETING_SUBJECT;

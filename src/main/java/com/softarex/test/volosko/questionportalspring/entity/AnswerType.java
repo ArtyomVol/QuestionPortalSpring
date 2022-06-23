@@ -1,6 +1,9 @@
 package com.softarex.test.volosko.questionportalspring.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name="answer_type")
+@Table(name = "answer_type")
 public class AnswerType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_type_seq")
@@ -17,6 +20,6 @@ public class AnswerType {
     @Setter(value = AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", unique = true, nullable = false)
     private String type;
 }
