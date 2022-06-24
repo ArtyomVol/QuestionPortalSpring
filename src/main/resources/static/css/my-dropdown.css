@@ -1,0 +1,54 @@
+@charset "windows-1251";
+
+.dropa {
+    text-decoration: none;
+    color: darkgray;
+    cursor: pointer;
+}
+
+.my-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.my-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 140px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.my-dropdown::after {
+    content: " \23F7";
+    margin-left: auto;
+    margin-right: 0;
+    color: lightgray;
+}
+
+.my-dropdown-content a {
+    color: black;
+    padding: 6px 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.my-dropdown-content a:hover {
+    background-color: #f1f1f1
+}
+
+.my-dropdown:hover .my-dropdown-content {
+    display: block;
+}
+
+.my-dropdown:hover .dropa {
+    color: steelblue;
+}
+
+.my-dropdown:hover:after {
+    color: steelblue;
+}

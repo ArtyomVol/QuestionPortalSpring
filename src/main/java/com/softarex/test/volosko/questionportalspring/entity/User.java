@@ -1,6 +1,9 @@
 package com.softarex.test.volosko.questionportalspring.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,15 +11,11 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-//хз класс является объектной моделью таблицы в БД
 @Table(name = "\"user\"")
-// связывание класс с таблице в БД
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    // указали (+ стратегия для гена) генератор, которой будет использоваться + обозвали
     @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
-    // создаём генератор + берём инфу о нём из БД (начальное значение)
     @Column(name = "id")
     @Setter(value = AccessLevel.PRIVATE)
     private Long id;
@@ -45,15 +44,10 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+    public User(String email, String firstName, String lastName, String phoneNumber) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 }

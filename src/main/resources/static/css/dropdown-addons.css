@@ -1,0 +1,8 @@
+@charset "windows-1251";
+
+.new_dropdown::after {
+    content: " \23F7";
+    margin-left: auto;
+    margin-right: 0;
+    color: lightgray;
+}

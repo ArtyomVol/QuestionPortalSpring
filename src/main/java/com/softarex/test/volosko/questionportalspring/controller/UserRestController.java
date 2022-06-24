@@ -1,74 +1,51 @@
 package com.softarex.test.volosko.questionportalspring.controller;
 
-import com.softarex.test.volosko.questionportalspring.entity.User;
-import com.softarex.test.volosko.questionportalspring.entity.Message;
-import com.softarex.test.volosko.questionportalspring.exception.UserIsMissingException;
-import com.softarex.test.volosko.questionportalspring.exception.UserLoginException;
-import com.softarex.test.volosko.questionportalspring.exception.UserRegistrationException;
-import com.softarex.test.volosko.questionportalspring.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserLoginDto;
+import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserRegistrationDto;
+import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserUpdateDto;
+import com.softarex.test.volosko.questionportalspring.service.rest.UserRestService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/api/v1/users")
 public class UserRestController {
-    private final UserService userService;
-
-    @Autowired
-    public UserRestController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @RequestMapping(value = "/email", method = RequestMethod.GET, produces = {
-            MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @ResponseBody
-    public User getUserByEmail(@PathVariable("userEmail") String email){
-        User user = null;
-        try {
-            user = userService.getUserByEmail(email);
-        } catch (UserIsMissingException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    // DEEEEEEEEEEEEEELEEEEEEEEEEEEEET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-    }
-    // DEEEEEEEEEEEEEELEEEEEEEEEEEEEET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> signIn(@RequestBody User user){
-        try {
-            userService.createUser(user);
-        } catch (UserRegistrationException e) {
-            return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.NOT_ACCEPTABLE);
-        }
-        return new ResponseEntity<>(new Message("Registration success"), HttpStatus.CREATED);
+    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> signIn(@RequestBody UserRegistrationDto user) {
+        return UserRestService.signIn(user);
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> logIn(@RequestBody User userData){
-        try {
-            User user = userService.getUserByEmailAndPassword(userData.getEmail(), userData.getPassword());
-        } catch (UserLoginException e) {
-            return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.NOT_ACCEPTABLE);
-        }
-        return new ResponseEntity<>(new Message("Login success"), HttpStatus.CREATED);
+    public ResponseEntity<?> logIn(@RequestBody UserLoginDto userData, HttpServletRequest request) {
+        return UserRestService.logIn(userData, request);
     }
 
-    /*
-    @GetMapping(value = "/email", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserByEmail(@RequestParam(name = "email") String email){
-        User user = userService.getUserByEmail(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }*/
+    @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeUserData(@RequestBody UserUpdateDto userUpdateDto, HttpServletRequest request) {
+        return UserRestService.changeUserData(userUpdateDto, request);
+    }
 
+    @DeleteMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@RequestBody String password, HttpServletRequest request) {
+        return UserRestService.deleteUserWithPasswordCheck(password, request);
+    }
+
+    @GetMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> logOut(HttpServletRequest request) {
+        return UserRestService.logOut(request);
+    }
+
+    @GetMapping(value = "/get-user-from-session", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserFromSession(HttpServletRequest request) {
+        return UserRestService.getUserFromSession(request);
+    }
+
+    @GetMapping(value = "/get-all-other-users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllOtherUsers(HttpServletRequest request) {
+        return UserRestService.getAllOtherUsers(request);
+    }
 }
