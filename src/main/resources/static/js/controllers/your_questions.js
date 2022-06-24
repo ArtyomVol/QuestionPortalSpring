@@ -21,7 +21,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
 
     $scope.questionsPerPage = 5;
     $scope.questionsCount = 0;
-    $scope.paginationInfo= "";
+    $scope.paginationInfo = "";
 
     $scope.pagesNums = {
         firstPage: 1,
@@ -134,46 +134,57 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
     }
 
     $scope.addQuestion = function () {
-        let newQuestion = {
-            fromUser: $scope.user,
-            forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
-            questionText: $scope.questionText,
-            answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
-            answerOptions: $scope.options,
-            answer: ""
-        };
-        $http({
-            method: 'POST',
-            url: '/api/v1/questions/create',
-            data: angular.toJson(newQuestion),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(
-            function (response) {
-                alert(response.data.message);
-                closeModal();
-                getQuestionsCount("currentPage");
-            }
-        );
+        let errorMsg = checkQuestionFields($scope.questionText, $scope.selectedAnswerType, $scope.options);
+        if (errorMsg !== "") {
+            alert(errorMsg);
+        } else {
+            let newQuestion = {
+                fromUser: $scope.user,
+                forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
+                questionText: $scope.questionText,
+                answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
+                answerOptions: $scope.options,
+                answer: ""
+            };
+            $http({
+                method: 'POST',
+                url: '/api/v1/questions/create',
+                data: angular.toJson(newQuestion),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                function (response) {
+                    alert(response.data.message);
+                    closeModal();
+                    getQuestionsCount("currentPage");
+                }
+            );
+        }
     }
 
     $scope.editQuestion = function () {
-        $scope.questionForEdit.answer = "";
-        $http({
-            method: 'PUT',
-            url: '/api/v1/questions/',
-            data: angular.toJson($scope.questionForEdit),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(
-            function (response) {
-                alert(response.data.message);
-                closeModal();
-                getQuestionsCount("currentPage");
-            }
-        );
+        let errorMsg = checkQuestionFields($scope.questionForEdit.questionText, $scope.questionForEdit.answerType.type,
+            $scope.questionForEdit.answerOptions);
+        if (errorMsg !== "") {
+            alert(errorMsg);
+        } else {
+            $scope.questionForEdit.answer = "";
+            $http({
+                method: 'PUT',
+                url: '/api/v1/questions/',
+                data: angular.toJson($scope.questionForEdit),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                function (response) {
+                    alert(response.data.message);
+                    closeModal();
+                    getQuestionsCount("currentPage");
+                }
+            );
+        }
     }
 
     $scope.deleteQuestion = function (question) {
@@ -334,10 +345,10 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
                 $scope.pagesNums.currentPage++;
                 break;
             case "pageAfterAfter" :
-                $scope.pagesNums.currentPage+=2;
+                $scope.pagesNums.currentPage += 2;
                 break;
             case "lastPage" :
-                $scope.pagesNums.currentPage=$scope.pagesNums.lastPage;
+                $scope.pagesNums.currentPage = $scope.pagesNums.lastPage;
                 break;
         }
         if (pagesCount < $scope.pagesNums.currentPage) {
@@ -481,6 +492,27 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             }
         );
     }
+
+    function checkQuestionFields(questionText, answerType, answerOption) {
+        let errorMsg = "";
+        if (questionText.length > 100) {
+            errorMsg += "The length of the question must be no more than 100 characters.\n";
+        }
+        if (answerType !== "Text" && (answerOption.length === 0 || answerOption.length < 100)) {
+            errorMsg += "The length of the question must be no less than 0 and no more than 100 characters.\n";
+        }
+        return errorMsg;
+    }
+
+
+    let newQuestion = {
+        fromUser: $scope.user,
+        forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
+        questionText: $scope.questionText,
+        answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
+        answerOptions: $scope.options,
+        answer: ""
+    };
 
     function closeModal() {
         let modalWindow = document.getElementsByClassName("modal fade show")[0];
