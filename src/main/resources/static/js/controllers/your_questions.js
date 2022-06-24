@@ -369,16 +369,6 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         return errorMsg;
     }
 
-
-    let newQuestion = {
-        fromUser: $scope.user,
-        forUser: $scope.otherUsers.find(x => x.email === $scope.selectedUserEmail),
-        questionText: $scope.questionText,
-        answerType: $scope.answerTypes.find(x => x.type === $scope.selectedAnswerType),
-        answerOptions: $scope.options,
-        answer: ""
-    };
-
     function closeModal() {
         let modalWindow = document.getElementsByClassName("modal fade show")[0];
         modalWindow.getElementsByClassName("btn-close")[0].click();
