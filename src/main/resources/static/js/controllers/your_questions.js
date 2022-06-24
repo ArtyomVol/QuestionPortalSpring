@@ -73,6 +73,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         $scope.selectedAnswerType = selectedAnswerType;
         currentText.style.fontSize = newText.style.fontSize;
         currentText.style.paddingRight = newText.style.paddingRight;
+        showOrHideAnswerOptions(selectedAnswerType, "optionsBlockOnQuestionAdd",
+            "optionsOnQuestionAdd");
     }
 
     $scope.replaceSelectedAnswerTypeOnQuestionEdit = function (selectedAnswerType) {
@@ -82,6 +84,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
             $scope.answerTypes.find(a => a.type === selectedAnswerType);
         currentText.style.fontSize = newText.style.fontSize;
         currentText.style.paddingRight = newText.style.paddingRight;
+        showOrHideAnswerOptions(selectedAnswerType, "optionsBlockOnQuestionEdit",
+            "optionsOnQuestionEdit");
     }
 
     $scope.adjustAddQuestionText = function () {
@@ -90,6 +94,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         adjustTextSize("answerTypeOnQuestionAdd", $scope.selectedAnswerType, textSizeTest, 209);
         adjustOtherUsersText("", textSizeTest);
         adjustAnswerTypeText("", textSizeTest);
+        showOrHideAnswerOptions($scope.selectedAnswerType, "optionsBlockOnQuestionAdd",
+            "optionsOnQuestionAdd");
     }
 
     $scope.adjustEditQuestionText = function (question) {
@@ -99,6 +105,19 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         adjustTextSize("answerTypeOnQuestionEdit", $scope.questionForEdit.answerType.type, textSizeTest, 209);
         adjustOtherUsersText("Edit", textSizeTest);
         adjustAnswerTypeText("Edit", textSizeTest);
+        showOrHideAnswerOptions($scope.questionForEdit.answerType.type, "optionsBlockOnQuestionEdit",
+            "optionsOnQuestionEdit");
+    }
+
+    function showOrHideAnswerOptions(answerType, optionsBlockId, optionsId){
+        if (answerType === "Text") {
+            document.getElementById(optionsId).removeAttribute("required");
+            document.getElementById(optionsBlockId).style.display = "none";
+        }
+        else {
+            document.getElementById(optionsId).setAttribute("required", "");
+            document.getElementById(optionsBlockId).style.display = "";
+        }
     }
 
     function adjustAnswerTypeText(textIdAfter, textSizeTest) {
@@ -146,6 +165,9 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
                 answerOptions: $scope.options,
                 answer: ""
             };
+            if (newQuestion.answerType.type === "Text"){
+                newQuestion.answerOptions = "";
+            }
             $http({
                 method: 'POST',
                 url: '/api/v1/questions/create',
@@ -169,6 +191,9 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         if (errorMsg !== "") {
             alert(errorMsg);
         } else {
+            if ($scope.questionForEdit.answerType.type === "Text"){
+                $scope.questionForEdit.answerOptions = "";
+            }
             $scope.questionForEdit.answer = "";
             $http({
                 method: 'PUT',
@@ -498,8 +523,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         if (questionText.length > 100) {
             errorMsg += "The length of the question must be no more than 100 characters.\n";
         }
-        if (answerType !== "Text" && (answerOption.length === 0 || answerOption.length < 100)) {
-            errorMsg += "The length of the question must be no less than 0 and no more than 100 characters.\n";
+        if (answerType !== "Text" && (answerOption.length === 0 || answerOption.length > 100)) {
+            errorMsg += "The length of the answer options must be no less than 0 and no more than 100 characters.\n";
         }
         return errorMsg;
     }

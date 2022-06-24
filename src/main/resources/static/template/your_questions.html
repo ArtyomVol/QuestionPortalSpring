@@ -104,13 +104,13 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="row m-b-4px">
+                                        <div class="row m-b-4px" id="optionsBlockOnQuestionAdd">
                                             <div class="col-1 modal-body-inner-text-container">
                                                 <p class="mb-0 color-darkgray m-t-4px m-l-18px">
                                                     Options <span class="color-darkred">*</span></p>
                                             </div>
                                             <textarea type="text" class="form-control modal-input" ng-model="options"
-                                                      required></textarea>
+                                                      required="" id="optionsOnQuestionAdd"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer background-color-fafafa">
@@ -237,13 +237,15 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="row m-b-4px">
+                                            <div class="row m-b-4px" id="optionsBlockOnQuestionEdit">
                                                 <div class="col-1 modal-body-inner-text-container">
                                                     <p class="mb-0 color-darkgray m-t-4px m-l-18px">
                                                         Options <span class="color-darkred">*</span></p>
                                                 </div>
                                                 <textarea type="text" class="form-control modal-input"
-                                                          ng-model="questionForEdit.answerOptions" required></textarea>
+                                                          id="optionsOnQuestionEdit"
+                                                          ng-model="questionForEdit.answerOptions" required="">
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="modal-footer background-color-fafafa">
