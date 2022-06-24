@@ -44,7 +44,6 @@ public class UserService {
             try {
                 javaMailSender.send(simpleMailMessage);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new InvalidMailFormatException(userDto.getEmail());
             }
             userDto.setPassword((encryptPassword(userDto.getPassword())));
