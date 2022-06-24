@@ -22,7 +22,13 @@ app.controller("EditProfileController", function ($scope, $http) {
                 if (!response.data) {
                     window.location = "/#!/login";
                 }
-                $scope.user = response.data;
+                let sessionUser = response.data;
+                $scope.user.email = sessionUser.email;
+                $scope.user.phoneNumber = sessionUser.phoneNumber;
+                $scope.user.lastName = sessionUser.lastName;
+                $scope.user.firstName = sessionUser.firstName;
+                $scope.user.password = "";
+                $scope.user.newPassword = "";
                 var userFLName = $scope.user.firstName + " " + $scope.user.lastName;
                 if (userFLName === " ") {
                     userFLName = $scope.user.email;
@@ -96,6 +102,6 @@ app.controller("EditProfileController", function ($scope, $http) {
 
     function clearFormData() {
         $scope.user.password = "";
-        $scope.oldPassword = "";
+        $scope.user.newPassword = "";
     }
 });

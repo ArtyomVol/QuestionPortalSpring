@@ -3,59 +3,53 @@
 <link rel="stylesheet" href="/css/place-holder.css">
 <link rel="stylesheet" href="/css/loader.css">
 <div class="container-fluid">
-    <div class="row">
-        <div style="width: 37%"></div>
-        <div class="card order-md-1 text-center" style="width: 26%; padding: 2%;">
-            <h4 class="mb-3"><b>LOGO<span style="color: steelblue;">TYPE</span></b></h4>
-            <h5 class="mb-4"><b>Sign Up</b></h5>
-            <form ng-submit="createUser()">
-                <label class="placeholder-box text-start">
-                    <input class="form-control" required type="text" ng-model="user.email">
-                    <div class="placeholder-text">
-                        Email <strong style="color: darkred;">*</strong>
-                    </div>
-                </label>
-                <label class="placeholder-box text-start">
-                    <input class="form-control" required type="password" ng-model="user.password">
-                    <div class="placeholder-text">
-                        Password <strong style="color: darkred;">*</strong>
-                    </div>
-                </label>
-                <label class="placeholder-box text-start">
-                    <input class="form-control" required type="password" ng-model="confirmPassword">
-                    <div class="placeholder-text">
-                        Confirm Password <strong style="color: darkred;">*</strong><!--value="${requestScope.registrationUsername}">-->
-                    </div>
-                </label>
-                <div class="mb-2">
-                    <input type="text" class="form-control" ng-model="user.firstName"
-                           placeholder="First Name">
+    <div class="card order-md-1 text-center central-window">
+        <h4 class="mb-3"><b>LOGO<span class="color-steelblue">TYPE</span></b></h4>
+        <h5 class="mb-4"><b>Sign Up</b></h5>
+        <form ng-submit="createUser()">
+            <label class="placeholder-box text-start">
+                <input class="form-control" required type="text" ng-model="user.email">
+                <div class="placeholder-text">
+                    Email <strong class="color-darkred">*</strong>
                 </div>
-                <div class="mb-2">
-                    <input type="text" class="form-control" ng-model="user.lastName"
-                           placeholder="Last Name">
+            </label>
+            <label class="placeholder-box text-start">
+                <input class="form-control" required type="password" ng-model="user.password">
+                <div class="placeholder-text">
+                    Password <strong class="color-darkred">*</strong>
                 </div>
-                <div class="mb-2">
-                    <input type="tel" class="form-control" ng-model="user.phoneNumber"
-                           placeholder="Phone Number">
+            </label>
+            <label class="placeholder-box text-start">
+                <input class="form-control" required type="password" ng-model="confirmPassword">
+                <div class="placeholder-text">
+                    Confirm Password <strong class="color-darkred">*</strong>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit" id="sign_btn"
-                        style="width: 100%; font-size: 1rem;">SIGN UP
-                </button>
-                <div class="loader mt-3" id="loader"
-                     style="margin-left: 42.5%; display: none;">
-                </div>
-            </form>
-                <div class="row mt-3">
-                    <div style="width: 5%"></div>
-                    <div style="padding: 0; width: 55%">
-                        <h6 style="margin-bottom: 0; margin-top: 1%"><b>Already have account?</b></h6>
-                    </div>
-                    <div style="width: 15%; padding: 0">
-                        <a href="/#!/login" style="color: steelblue; font-size: 1rem; text-decoration: none;">
-                            <b>Log In</b></a>
-                    </div>
-                </div>
+            </label>
+            <div class="mb-2">
+                <input type="text" class="form-control" ng-model="user.firstName"
+                       placeholder="First Name">
+            </div>
+            <div class="mb-2">
+                <input type="text" class="form-control" ng-model="user.lastName"
+                       placeholder="Last Name">
+            </div>
+            <div class="mb-2">
+                <input type="tel" class="form-control" ng-model="user.phoneNumber"
+                       placeholder="Phone Number">
+            </div>
+            <button class="btn btn-lg btn-primary btn-block btn-100-per" type="submit" id="sign_btn">SIGN UP
+            </button>
+            <div class="loader mt-3" id="loader">
+            </div>
+        </form>
+        <div class="row mt-3">
+            <div class="under-btn-text-left width-55-per">
+                <h6><b>Already have account?</b></h6>
+            </div>
+            <div class="under-btn-text-right width-15-per">
+                <a class="color-steelblue without-text-decoration h6" href="/#!/login">
+                    <b>Log In</b></a>
+            </div>
         </div>
     </div>
 </div>
