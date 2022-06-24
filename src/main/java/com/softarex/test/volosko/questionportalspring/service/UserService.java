@@ -22,11 +22,12 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final JavaMailSender javaMailSender = new JavaMailSenderImpl();
+    private final JavaMailSender javaMailSender;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JavaMailSenderImpl javaMailSenderImpl) {
         this.userRepository = userRepository;
+        this.javaMailSender = javaMailSenderImpl;
     }
 
     public User getUserByEmail(String email) {
@@ -43,6 +44,7 @@ public class UserService {
             try {
                 javaMailSender.send(simpleMailMessage);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new InvalidMailFormatException(userDto.getEmail());
             }
             userDto.setPassword((encryptPassword(userDto.getPassword())));
