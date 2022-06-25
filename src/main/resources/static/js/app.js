@@ -15,6 +15,9 @@ app.config(function ($routeProvider) {
     }).when('/your_questions', {
         templateUrl: '/template/your_questions.html',
         controller: 'YourQuestionsController'
+    }).when('/answer_the_question', {
+        templateUrl: '/template/answer_the_question.html',
+        controller: 'AnswerTheQuestionController'
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',

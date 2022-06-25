@@ -16,7 +16,7 @@ app.controller("RegistrationController", function ($scope, $http) {
     pageLoad();
 
     $scope.createUser = function () {
-        var errorMsg = checkData();
+        let errorMsg = checkData();
         if (errorMsg === "") {
             document.getElementById("sign_btn").disabled = "true";
             document.getElementById("loader").style.display = "block";
@@ -44,9 +44,9 @@ app.controller("RegistrationController", function ($scope, $http) {
     }
 
     function checkData() {
-        var errorMsg = "";
-        if ($scope.user.email.length > 36) {
-            errorMsg += "The length of the email must be no more than 36 characters.\n";
+        let errorMsg = "";
+        if ($scope.user.email.length > 29) {
+            errorMsg += "The length of the email must be no more than 29 characters.\n";
         }
         if ($scope.user.password.length < 8 || $scope.user.password.length > 32) {
             errorMsg += "The length of the password must be no less then 8 and no more then 32 characters.\n"
@@ -55,13 +55,16 @@ app.controller("RegistrationController", function ($scope, $http) {
             errorMsg += "Passwords mismatch\n";
             clearFormData();
         }
+        if ($scope.user.firstName.length + $scope.user.lastName.length > 28) {
+            errorMsg += "The length of the first and last name together must be no more then 28 characters.\n";
+        }
         if ($scope.user.firstName.length > 20) {
             errorMsg += "The length of the first name must be no more then 20 characters.\n";
         }
         if ($scope.user.lastName.length > 20) {
             errorMsg += "The length of the last name must be no more then 20 characters.\n";
         }
-        var regNumber = new RegExp('^(\\+)?[0-9]+$');
+        let regNumber = new RegExp('^(\\+)?[0-9]+$');
         if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)) {
             errorMsg += "The phone number must be consist of only numbers (or + at the beginning).\n";
         } else if ($scope.user.phoneNumber.length > 16) {

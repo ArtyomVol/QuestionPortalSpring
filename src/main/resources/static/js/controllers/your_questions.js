@@ -1,5 +1,4 @@
-app.controller("YourQuestionsController", function ($scope, $http, $route) {
-    $scope.forUserPoints = "";
+app.controller("YourQuestionsController", function ($scope, $http) {
     $scope.user;
 
     $scope.message = {
@@ -32,6 +31,8 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         pageAfterAfter: 6,
         lastPage: 7
     };
+
+    $scope.answerTypesWithoutOptions= ["Single line text", "Multiline text", "Date"];
 
     pageLoad();
 
@@ -110,7 +111,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
     }
 
     function showOrHideAnswerOptions(answerType, optionsBlockId, optionsId){
-        if (answerType === "Text") {
+        if ($scope.answerTypesWithoutOptions.includes(answerType)) {
             document.getElementById(optionsId).removeAttribute("required");
             document.getElementById(optionsBlockId).style.display = "none";
         }
@@ -165,7 +166,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
                 answerOptions: $scope.options,
                 answer: ""
             };
-            if (newQuestion.answerType.type === "Text"){
+            if ($scope.answerTypesWithoutOptions.includes(newQuestion.answerType.type)){
                 newQuestion.answerOptions = "";
             }
             $http({
@@ -191,7 +192,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         if (errorMsg !== "") {
             alert(errorMsg);
         } else {
-            if ($scope.questionForEdit.answerType.type === "Text"){
+            if ($scope.answerTypesWithoutOptions.includes($scope.questionForEdit.answerType.type)){
                 $scope.questionForEdit.answerOptions = "";
             }
             $scope.questionForEdit.answer = "";
@@ -278,11 +279,28 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         );
     }
 
+    function getAllQuestions() {
+        $http({
+            method: 'GET',
+            url: '/api/v1/questions/get_questions_from_session_user/all',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+                $scope.questions = response.data;
+            },
+            function (response) {
+                alert(response.data.message);
+                window.location = "/#!/login";
+            }
+        );
+    }
+
     function getQuestionsCount(buttonId) {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/count',
-            data: angular.toJson($scope.pagination),
+            url: '/api/v1/questions/count-from-user',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -305,9 +323,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         let questionsIsAll = result.questionsIsAll;
         $scope.paginationInfo = result.paginationInfo;
         if (questionsIsAll) {
-            $scope.questionsPerPage = $scope.questionsCount;
-            getQuestions();
-            $scope.questionsPerPage = "All";
+            getAllQuestions();
         }
         else {
             getQuestions();
@@ -363,7 +379,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $route) {
         if (questionText.length > 100) {
             errorMsg += "The length of the question must be no more than 100 characters.\n";
         }
-        if (answerType !== "Text" && (answerOption.length === 0 || answerOption.length > 100)) {
+        if (!$scope.answerTypesWithoutOptions.includes(answerType) && (answerOption.length === 0 || answerOption.length > 100)) {
             errorMsg += "The length of the answer options must be no less than 0 and no more than 100 characters.\n";
         }
         return errorMsg;

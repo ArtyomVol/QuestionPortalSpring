@@ -19,8 +19,8 @@ app.controller("DeleteProfileController", function ($scope, $http) {
                 if (!response.data) {
                     window.location = "/#!/login";
                 }
-                var user = response.data;
-                var userFLName = user.firstName + " " + user.lastName;
+                let user = response.data;
+                let userFLName = user.firstName + " " + user.lastName;
                 if (userFLName === " ") {
                     userFLName = user.email;
                 }

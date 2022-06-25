@@ -18,6 +18,11 @@ public class QuestionRestController {
         return QuestionRestService.getAllQuestionsFromSessionUser(request);
     }
 
+    @GetMapping(value = "/get_questions_for_session_user/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<?>> getAllQuestionsForSessionUser(HttpServletRequest request) {
+        return QuestionRestService.getAllQuestionsForSessionUser(request);
+    }
+
     @GetMapping(value = "/get_questions_from_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<?>> getQuestionsFromSessionUser(
             @RequestParam(name = "questions_per_page") int questionsPerPage,
@@ -25,9 +30,21 @@ public class QuestionRestController {
         return QuestionRestService.getQuestionsFromSessionUser(questionsPerPage, pageNum, request);
     }
 
-    @GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get_questions_for_session_user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<?>> getQuestionsForSessionUser(
+            @RequestParam(name = "questions_per_page") int questionsPerPage,
+            @RequestParam(name = "page_num") int pageNum, HttpServletRequest request) {
+        return QuestionRestService.getQuestionsForSessionUser(questionsPerPage, pageNum, request);
+    }
+
+    @GetMapping(value = "/count-from-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCountOfQuestionsFromSessionUser(HttpServletRequest request) {
         return QuestionRestService.getCountOfQuestionsFromSessionUser(request);
+    }
+
+    @GetMapping(value = "/count-for-user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCountOfQuestionsForSessionUser(HttpServletRequest request) {
+        return QuestionRestService.getCountOfQuestionsForSessionUser(request);
     }
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)

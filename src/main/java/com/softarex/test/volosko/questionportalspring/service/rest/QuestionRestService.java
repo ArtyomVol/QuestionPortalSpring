@@ -27,10 +27,24 @@ public class QuestionRestService {
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
+    public static ResponseEntity<List<?>> getAllQuestionsForSessionUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        List<QuestionDto> questions = questionService.getQuestionsByForUser(user);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
     public static ResponseEntity<List<?>> getQuestionsFromSessionUser(
             int questionsPerPage, int pageNum, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         List<QuestionDto> questions = questionService.getQuestionsByFromUserWithPagination(
+                user, questionsPerPage, pageNum);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    public static ResponseEntity<List<?>> getQuestionsForSessionUser(
+            int questionsPerPage, int pageNum, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        List<QuestionDto> questions = questionService.getQuestionsByForUserWithPagination(
                 user, questionsPerPage, pageNum);
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
@@ -48,6 +62,12 @@ public class QuestionRestService {
     public static ResponseEntity<?> getCountOfQuestionsFromSessionUser(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         int questionsCount = questionService.getQuestionsByFromUserCount(user);
+        return new ResponseEntity<>(questionsCount, HttpStatus.OK);
+    }
+
+    public static ResponseEntity<?> getCountOfQuestionsForSessionUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        int questionsCount = questionService.getQuestionsByForUserCount(user);
         return new ResponseEntity<>(questionsCount, HttpStatus.OK);
     }
 

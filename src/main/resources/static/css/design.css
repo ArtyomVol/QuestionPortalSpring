@@ -172,6 +172,14 @@
     padding-left: 8px;
 }
 
+.field-read-only{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    background-color: lightgray;
+    border-width: 0;
+}
+
 .delete-btn {
     width: 28%;
     font-size: 1rem;
@@ -186,6 +194,10 @@
     font-size: 1rem;
     padding-top: 6px;
     padding-bottom: 6px;
+}
+
+.padding-left-1-per {
+    padding-left: 1%;
 }
 
 .padding-left-2-per {
@@ -234,8 +246,7 @@
 .dropdown-main-btn {
     padding: 0;
     width: 50%;
-    border-color: lightgray;
-    border: 1px;
+    border: 1px lightgray;
     margin-left: 6px;
 }
 
@@ -290,6 +301,11 @@
     padding: 0;
 }
 
+.items-edit-column {
+    width: 3%;
+    padding: 0;
+}
+
 .item-edit-btn {
     padding: 0 6px 0 0;
 }
@@ -312,4 +328,24 @@
 
 .hidden-block-to-check-font-weidth {
     display: inline; position: absolute; opacity: 0; font-size: 16px
+}
+
+.modal-norm {
+    max-width: 400px;
+}
+
+.word-wrap {
+    white-space: pre-line;
+}
+
+.dropdown-combobox-btn {
+    padding: 0;
+    width: 100%;
+    border-color: lightgray;
+    border: 1px;
+}
+
+.datetimepicker {
+    width: 100%;
+    margin: 0;
 }

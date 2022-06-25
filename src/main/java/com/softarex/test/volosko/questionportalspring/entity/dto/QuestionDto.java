@@ -1,5 +1,6 @@
 package com.softarex.test.volosko.questionportalspring.entity.dto;
 
+import com.softarex.test.volosko.questionportalspring.entity.dto.AnswerTypeDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserSessionDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -29,7 +29,7 @@ app.controller("EditProfileController", function ($scope, $http) {
                 $scope.user.firstName = sessionUser.firstName;
                 $scope.user.password = "";
                 $scope.user.newPassword = "";
-                var userFLName = $scope.user.firstName + " " + $scope.user.lastName;
+                let userFLName = $scope.user.firstName + " " + $scope.user.lastName;
                 if (userFLName === " ") {
                     userFLName = $scope.user.email;
                 }
@@ -62,17 +62,20 @@ app.controller("EditProfileController", function ($scope, $http) {
     }
 
     function checkData() {
-        var errorMsg = "";
+        let errorMsg = "";
+        if ($scope.user.firstName.length + $scope.user.lastName.length > 28) {
+            errorMsg += "The length of the first and last name together must be no more then 28 characters.\n";
+        }
         if ($scope.user.firstName.length > 20) {
             errorMsg += "The length of the first name must be no more then 20 characters.\n";
         }
         if ($scope.user.lastName.length > 20) {
             errorMsg += "The length of the last name must be no more then 20 characters.\n";
         }
-        if ($scope.user.email.length > 36) {
-            errorMsg += "The length of the email must be no more than 36 characters.\n";
+        if ($scope.user.email.length > 29) {
+            errorMsg += "The length of the email must be no more than 29 characters.\n";
         }
-        var regNumber = new RegExp('^(\\+)?[0-9]+$');
+        let regNumber = new RegExp('^(\\+)?[0-9]+$');
         if ($scope.user.phoneNumber !== "" && !regNumber.test($scope.user.phoneNumber)) {
             errorMsg += "The phone number must be consist of only numbers (or + at the beginning).\n";
         } else if ($scope.user.phoneNumber.length > 16) {

@@ -25,7 +25,14 @@ public class QuestionService {
         if (fromUser == null) {
             throw new UserIsNotAuthorizedException();
         }
-        return convertQuestionListToQuestionDtoList(questionRepository.getQuestionsByFromUser(fromUser));
+        return convertQuestionListToQuestionDtoList(questionRepository.getQuestionsByFromUserOrderById(fromUser));
+    }
+
+    public List<QuestionDto> getQuestionsByForUser(User forUser) {
+        if (forUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
+        return convertQuestionListToQuestionDtoList(questionRepository.getQuestionsByForUserOrderById(forUser));
     }
 
     public void createQuestion(QuestionDto questionDto) {
@@ -54,11 +61,31 @@ public class QuestionService {
         return convertQuestionListToQuestionDtoList(questionsDao);
     }
 
+    public List<QuestionDto> getQuestionsByForUserWithPagination(User forUser, int questionsPerPage, int pageNum) {
+        List<Question> questionsDao;
+        int offset;
+
+        if (forUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
+        offset = (pageNum - 1) * questionsPerPage;
+        questionsDao = questionRepository.getQuestionsByForUserIdWithLimitAndOffset(forUser.getId(),
+                questionsPerPage, offset);
+        return convertQuestionListToQuestionDtoList(questionsDao);
+    }
+
     public int getQuestionsByFromUserCount(User fromUser) {
         if (fromUser == null) {
             throw new UserIsNotAuthorizedException();
         }
         return questionRepository.getQuestionsByFromUserCount(fromUser.getId());
+    }
+
+    public int getQuestionsByForUserCount(User forUser) {
+        if (forUser == null) {
+            throw new UserIsNotAuthorizedException();
+        }
+        return questionRepository.getQuestionsByForUserCount(forUser.getId());
     }
 
     private List<QuestionDto> convertQuestionListToQuestionDtoList(List<Question> questions) {
