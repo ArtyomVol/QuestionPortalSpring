@@ -231,7 +231,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getUserFromSession() {
         $http({
             method: 'GET',
-            url: '/api/v1/users/get-user-from-session',
+            url: '/api/v1/users/from/session',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -262,8 +262,8 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getQuestions() {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/get_questions_from_session_user?questions_per_page=' +
-                $scope.questionsPerPage + '&page_num=' + $scope.pagesNums.currentPage,
+            url: '/api/v1/questions/from-me?questions-per-page=' +
+                $scope.questionsPerPage + '&page-num=' + $scope.pagesNums.currentPage,
             data: angular.toJson($scope.pagination),
             headers: {
                 'Content-Type': 'application/json'
@@ -282,7 +282,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getAllQuestions() {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/get_questions_from_session_user/all',
+            url: '/api/v1/questions/from-me/all',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -300,7 +300,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getQuestionsCount(buttonId) {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/count-from-user',
+            url: '/api/v1/questions/from-me/count',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -333,7 +333,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getAllOtherUsers() {
         $http({
             method: 'GET',
-            url: '/api/v1/users/get-all-other-users',
+            url: '/api/v1/users/other',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -348,7 +348,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
     function getAnswerTypes() {
         $http({
             method: 'GET',
-            url: '/api/v1/answer-types/',
+            url: '/api/v1/answer/types/',
             headers: {
                 'Content-Type': 'application/json'
             }

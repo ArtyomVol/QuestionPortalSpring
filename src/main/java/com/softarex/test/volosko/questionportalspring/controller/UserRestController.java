@@ -39,12 +39,12 @@ public class UserRestController {
         return UserRestService.logOut(request);
     }
 
-    @GetMapping(value = "/get-user-from-session", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/from/session", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserFromSession(HttpServletRequest request) {
         return UserRestService.getUserFromSession(request);
     }
 
-    @GetMapping(value = "/get-all-other-users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/other", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllOtherUsers(HttpServletRequest request) {
         return UserRestService.getAllOtherUsers(request);
     }

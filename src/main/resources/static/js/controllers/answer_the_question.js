@@ -137,7 +137,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
     function getUserFromSession() {
         $http({
             method: 'GET',
-            url: '/api/v1/users/get-user-from-session',
+            url: '/api/v1/users/from/session',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -166,7 +166,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
     function getAllQuestions() {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/get_questions_for_session_user/all',
+            url: '/api/v1/questions/questions/for-me/all',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -184,8 +184,8 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
     function getQuestions() {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/get_questions_for_session_user?questions_per_page=' +
-                $scope.questionsPerPage + '&page_num=' + $scope.pagesNums.currentPage,
+            url: '/api/v1/questions/for-me?questions-per-page=' +
+                $scope.questionsPerPage + '&page-num=' + $scope.pagesNums.currentPage,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -203,7 +203,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
     function getQuestionsCount(buttonId) {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/count-for-user',
+            url: '/api/v1/questions/for-me/count',
             data: angular.toJson($scope.pagination),
             headers: {
                 'Content-Type': 'application/json'

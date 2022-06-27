@@ -76,7 +76,7 @@ app.controller("RegistrationController", function ($scope, $http) {
     function pageLoad() {
         $http({
             method: 'GET',
-            url: '/api/v1/users/get-user-from-session',
+            url: '/api/v1/users/from/session',
             headers: {
                 'Content-Type': 'application/json'
             }

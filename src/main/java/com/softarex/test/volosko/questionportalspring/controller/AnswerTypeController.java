@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/answer-types")
+@RequestMapping("/api/v1/answer/types")
 public class AnswerTypeController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
