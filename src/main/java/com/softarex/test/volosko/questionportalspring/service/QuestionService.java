@@ -16,10 +16,12 @@ import java.util.List;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionMapper questionMapper;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, QuestionMapper questionMapper) {
         this.questionRepository = questionRepository;
+        this.questionMapper = questionMapper;
     }
 
     public List<QuestionDto> getQuestionsByFromUser(User fromUser) {
@@ -37,7 +39,7 @@ public class QuestionService {
     }
 
     public void createQuestion(QuestionDto questionDto) {
-        questionRepository.save(QuestionMapper.questionDtoToEntityWithoutId(questionDto));
+        questionRepository.save(questionMapper.questionDtoToEntityWithoutId(questionDto));
     }
 
     public void deleteQuestionById(long id, User user) {
@@ -51,7 +53,7 @@ public class QuestionService {
     }
 
     public void editQuestion(QuestionDto questionDto) {
-        Question question = QuestionMapper.questionDtoToEntityWithId(questionDto);
+        Question question = questionMapper.questionDtoToEntityWithId(questionDto);
         questionRepository.save(question);
     }
 
@@ -98,7 +100,7 @@ public class QuestionService {
     private List<QuestionDto> convertQuestionListToQuestionDtoList(List<Question> questions) {
         List<QuestionDto> questionsDto = new ArrayList<>();
         for (Question questionDao : questions) {
-            questionsDto.add(QuestionMapper.questionEntityToDto(questionDao));
+            questionsDto.add(questionMapper.questionEntityToDto(questionDao));
         }
         return questionsDto;
     }

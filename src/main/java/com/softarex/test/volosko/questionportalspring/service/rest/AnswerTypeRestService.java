@@ -11,14 +11,14 @@ import java.util.List;
 
 @Component
 public class AnswerTypeRestService {
-    private static AnswerTypeService answerTypeService;
+    private final AnswerTypeService answerTypeService;
 
     @Autowired
     public AnswerTypeRestService(AnswerTypeService answerTypeService) {
-        AnswerTypeRestService.answerTypeService = answerTypeService;
+        this.answerTypeService = answerTypeService;
     }
 
-    public static ResponseEntity<List<AnswerTypeDto>> getAll() {
+    public ResponseEntity<List<AnswerTypeDto>> getAll() {
         List<AnswerTypeDto> answerTypes = answerTypeService.getAllAnswerTypes();
         return new ResponseEntity<>(answerTypes, HttpStatus.OK);
     }

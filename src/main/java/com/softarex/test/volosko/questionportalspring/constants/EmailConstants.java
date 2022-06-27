@@ -12,5 +12,4 @@ public final class EmailConstants {
 
     private EmailConstants() {
     }
-
 }
