@@ -7,16 +7,16 @@ app.config(function ($routeProvider) {
         templateUrl: '/template/login.html',
         controller: 'LoginController'
     }).when('/edit_profile', {
-        templateUrl: '/template/edit_profile.html',
+        templateUrl: '/template/edit-profile.html',
         controller: 'EditProfileController'
     }).when('/delete_profile', {
-        templateUrl: '/template/delete_profile.html',
+        templateUrl: '/template/delete-profile.html',
         controller: 'DeleteProfileController'
     }).when('/your_questions', {
-        templateUrl: '/template/your_questions.html',
+        templateUrl: '/template/your-questions.html',
         controller: 'YourQuestionsController'
     }).when('/answer_the_question', {
-        templateUrl: '/template/answer_the_question.html',
+        templateUrl: '/template/answer-the-question.html',
         controller: 'AnswerTheQuestionController'
     }).otherwise({
         redirectTo: '/login',
