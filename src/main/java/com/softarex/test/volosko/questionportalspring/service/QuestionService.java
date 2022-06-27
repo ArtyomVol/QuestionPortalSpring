@@ -3,6 +3,7 @@ package com.softarex.test.volosko.questionportalspring.service;
 import com.softarex.test.volosko.questionportalspring.entity.Question;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.entity.dto.QuestionDto;
+import com.softarex.test.volosko.questionportalspring.exception.UserCanNotDeleteQuestion;
 import com.softarex.test.volosko.questionportalspring.exception.UserIsNotAuthorizedException;
 import com.softarex.test.volosko.questionportalspring.mapper.QuestionMapper;
 import com.softarex.test.volosko.questionportalspring.repository.QuestionRepository;
@@ -39,8 +40,14 @@ public class QuestionService {
         questionRepository.save(QuestionMapper.questionDtoToEntityWithoutId(questionDto));
     }
 
-    public void deleteQuestionById(long id) {
-        questionRepository.deleteById(id);
+    public void deleteQuestionById(long id, User user) {
+        if (user == null){
+            throw new UserIsNotAuthorizedException();
+        }
+        int deletedRowsCount = questionRepository.deleteByIdAndFromUser(id, user);
+        if (deletedRowsCount == 0){
+            throw new UserCanNotDeleteQuestion(user.getEmail());
+        }
     }
 
     public void editQuestion(QuestionDto questionDto) {

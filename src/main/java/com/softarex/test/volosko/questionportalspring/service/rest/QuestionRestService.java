@@ -54,8 +54,9 @@ public class QuestionRestService {
         return new ResponseEntity<>(new Message("Question is successfully created"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> deleteQuestion(long id) {
-        questionService.deleteQuestionById(id);
+    public static ResponseEntity<?> deleteQuestion(long id, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.deleteQuestionById(id, user);
         return new ResponseEntity<>(new Message("Question is successfully deleted"), HttpStatus.CREATED);
     }
 

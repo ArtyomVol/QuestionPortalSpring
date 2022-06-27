@@ -4,6 +4,7 @@ import com.softarex.test.volosko.questionportalspring.entity.Question;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,4 +24,7 @@ public interface QuestionRepository extends CrudRepository<Question, Long> {
 
     @Query(value = "SELECT COUNT(*) FROM question WHERE for_user = :forUserId", nativeQuery = true)
     int getQuestionsByForUserCount(long forUserId);
+
+    @Transactional
+    int deleteByIdAndFromUser(Long id, User fromUser);
 }

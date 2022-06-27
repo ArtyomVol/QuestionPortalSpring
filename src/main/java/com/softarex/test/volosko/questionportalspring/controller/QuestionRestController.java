@@ -53,8 +53,8 @@ public class QuestionRestController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteQuestion(@PathVariable long id) {
-        return QuestionRestService.deleteQuestion(id);
+    public ResponseEntity<?> deleteQuestion(@PathVariable long id, HttpServletRequest request) {
+        return QuestionRestService.deleteQuestion(id, request);
     }
 
     @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
