@@ -5,7 +5,9 @@ import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserOnlyEm
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserRegistrationDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserSessionDto;
 
-public class UserMapper {
+public final class UserMapper {
+    private UserMapper() {
+    }
 
     public static User userDtoToUserEntity(UserRegistrationDto userDto) {
         return new User(userDto.getEmail(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName(),
@@ -22,5 +24,4 @@ public class UserMapper {
     public static UserOnlyEmailDto userEntityToUserOnlyEmailDto(User user) {
         return new UserOnlyEmailDto(user.getEmail());
     }
-
 }
