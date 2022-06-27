@@ -18,7 +18,7 @@ public class AnswerTypeRestService {
         AnswerTypeRestService.answerTypeService = answerTypeService;
     }
 
-    public static ResponseEntity<List<?>> getAll() {
+    public static ResponseEntity<List<AnswerTypeDto>> getAll() {
         List<AnswerTypeDto> answerTypes = answerTypeService.getAllAnswerTypes();
         return new ResponseEntity<>(answerTypes, HttpStatus.OK);
     }

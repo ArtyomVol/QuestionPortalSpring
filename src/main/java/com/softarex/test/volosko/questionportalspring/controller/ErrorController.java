@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorController {
 
     @ExceptionHandler(QuestionPortalException.class)
-    public ResponseEntity<?> handleException(QuestionPortalException ex) {
+    public ResponseEntity<Message> handleException(QuestionPortalException ex) {
         return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.NOT_ACCEPTABLE);
     }
 }

@@ -1,5 +1,6 @@
 package com.softarex.test.volosko.questionportalspring.controller;
 
+import com.softarex.test.volosko.questionportalspring.entity.dto.AnswerTypeDto;
 import com.softarex.test.volosko.questionportalspring.service.rest.AnswerTypeRestService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 public class AnswerTypeController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<?>> getAll() {
+    public ResponseEntity<List<AnswerTypeDto>> getAll() {
         return AnswerTypeRestService.getAll();
     }
 }
