@@ -6,16 +6,19 @@ app.config(function ($routeProvider) {
     }).when('/login', {
         templateUrl: '/template/login.html',
         controller: 'LoginController'
-    }).when('/edit_profile', {
+    }).when('/profile/edit', {
         templateUrl: '/template/edit-profile.html',
         controller: 'EditProfileController'
-    }).when('/delete_profile', {
+    }).when('/profile/delete', {
         templateUrl: '/template/delete-profile.html',
         controller: 'DeleteProfileController'
-    }).when('/your_questions', {
+    }).when('/questions/your', {
         templateUrl: '/template/your-questions.html',
         controller: 'YourQuestionsController'
-    }).when('/answer_the_question', {
+    }).when('/questions/answer', {
+        templateUrl: '/template/answer-the-question.html',
+        controller: 'AnswerTheQuestionController'
+    }).when('/forget-password', {
         templateUrl: '/template/answer-the-question.html',
         controller: 'AnswerTheQuestionController'
     }).otherwise({

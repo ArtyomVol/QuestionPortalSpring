@@ -83,7 +83,7 @@ app.controller("RegistrationController", function ($scope, $http) {
         }).then(
             function (response) {
                 if (response.data) {
-                    window.location = "/#!/your_questions";
+                    window.location = "/#!/questions/your";
                 }
             }
         );

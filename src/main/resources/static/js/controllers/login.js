@@ -32,7 +32,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                     $cookies.put('remember', 'no');
                     $cookies.remove('email');
                 }
-                window.location = "/#!/your_questions";
+                window.location = "/#!/questions/your";
             },
             function (response) {
                 $scope.errorMessage = response.data;
@@ -56,7 +56,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
         }).then(
             function (response) {
                 if (response.data) {
-                    window.location = "/#!/your_questions";
+                    window.location = "/#!/questions/your";
                 }
                 if ($cookies.get('remember') === 'yes') {
                     $scope.user.email = $cookies.get('email');
