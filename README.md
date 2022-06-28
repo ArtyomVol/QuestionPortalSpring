@@ -26,6 +26,8 @@ ___
 
 ## How to run
 
+### First of all, you can just open [Heroku](https://question-portal-spring.herokuapp.com/) =)
+
 To run the application, you need to:
 * Change data in a file [src/main/resources/application.properties](https://github.com/ArtyomVol/QuestionPortalSpring/blob/master/src/main/resources/application.properties)
 ```properties
