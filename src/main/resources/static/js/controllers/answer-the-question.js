@@ -168,7 +168,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
     function getAllQuestions() {
         $http({
             method: 'GET',
-            url: '/api/v1/questions/questions/for-me/all',
+            url: '/api/v1/questions/for-me/all',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -272,7 +272,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
             $scope.questionForEdit.answer = document.getElementById('comboBox').value;
         } else if ($scope.questionForEdit.answerType.type === "Date") {
             $scope.questionForEdit.answer = document.getElementById("Date").value;
-        }else if ($scope.questionForEdit.answer.length > 100) {
+        } else if ($scope.questionForEdit.answer.length > 100) {
             errorMsg = "The length of the answer must be no more then 100 characters."
         }
         return errorMsg;
@@ -282,11 +282,12 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
         let modalWindow = document.getElementsByClassName("modal fade show")[0];
         modalWindow.getElementsByClassName("btn-close")[0].click();
     }
-/*
-    window.onbeforeunload = function()
-    {
-        confirm("Страница закрывается");
-        return "123";
-    }*/
+
+    /*
+        window.onbeforeunload = function()
+        {
+            confirm("Страница закрывается");
+            return "123";
+        }*/
 });
 

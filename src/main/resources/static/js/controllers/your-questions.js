@@ -28,7 +28,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
         lastPage: 7
     };
 
-    $scope.answerTypesWithoutOptions= ["Single line text", "Multiline text", "Date"];
+    $scope.answerTypesWithoutOptions = ["Single line text", "Multiline text", "Date"];
 
     pageLoad();
 
@@ -120,12 +120,11 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
             "optionsOnQuestionEdit");
     }
 
-    function showOrHideAnswerOptions(answerType, optionsBlockId, optionsId){
+    function showOrHideAnswerOptions(answerType, optionsBlockId, optionsId) {
         if ($scope.answerTypesWithoutOptions.includes(answerType)) {
             document.getElementById(optionsId).removeAttribute("required");
             document.getElementById(optionsBlockId).style.display = "none";
-        }
-        else {
+        } else {
             document.getElementById(optionsId).setAttribute("required", "");
             document.getElementById(optionsBlockId).style.display = "";
         }
@@ -176,7 +175,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 answerOptions: $scope.options,
                 answer: ""
             };
-            if ($scope.answerTypesWithoutOptions.includes(newQuestion.answerType.type)){
+            if ($scope.answerTypesWithoutOptions.includes(newQuestion.answerType.type)) {
                 newQuestion.answerOptions = "";
             }
             $http({
@@ -203,7 +202,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
         if (errorMsg !== "") {
             alert(errorMsg);
         } else {
-            if ($scope.answerTypesWithoutOptions.includes($scope.questionForEdit.answerType.type)){
+            if ($scope.answerTypesWithoutOptions.includes($scope.questionForEdit.answerType.type)) {
                 $scope.questionForEdit.answerOptions = "";
             }
             $scope.questionForEdit.answer = "";
@@ -337,8 +336,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
         $scope.paginationInfo = result.paginationInfo;
         if (questionsIsAll) {
             getAllQuestions();
-        }
-        else {
+        } else {
             getQuestions();
         }
     }
