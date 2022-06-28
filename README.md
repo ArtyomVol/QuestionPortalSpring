@@ -17,6 +17,7 @@ ___
 
 ## Information about application
 
+This web application is oriented to GoogleChrome.
 This web application consist of 6 pages: LogIn, SignUp, EditProfile, DeleteProfile, YourQuestions and AnswerTheQuestions.
 There are email notification after registration and profile deletion.
 This web application is an example of a question system, where you can ask someone questions and provide answers to the questions, asked of you.

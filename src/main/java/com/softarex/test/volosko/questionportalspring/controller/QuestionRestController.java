@@ -6,7 +6,10 @@ import com.softarex.test.volosko.questionportalspring.service.rest.QuestionRestS
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,7 +20,7 @@ public class QuestionRestController {
     private final QuestionRestService questionRestService;
 
     @Autowired
-    public QuestionRestController(QuestionRestService questionRestService){
+    public QuestionRestController(QuestionRestService questionRestService) {
         this.questionRestService = questionRestService;
     }
 
@@ -68,5 +71,17 @@ public class QuestionRestController {
     @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Message> editQuestion(@RequestBody QuestionDto question) {
         return questionRestService.editQuestion(question);
+    }
+
+    @MessageMapping("/question/answer")
+    @SendTo("/question/answer")
+    public Message reportQuestionHasBeenAnswered(Message userEmailWhoseQuestionWasAnswered) {
+        return new Message(HtmlUtils.htmlEscape(userEmailWhoseQuestionWasAnswered.getMessage()));
+    }
+
+    @MessageMapping("/question/change")
+    @SendTo("/question/change")
+    public Message reportQuestionHasBeenChanged(Message userEmailWhoseQuestionWasChanged) {
+        return new Message(HtmlUtils.htmlEscape(userEmailWhoseQuestionWasChanged.getMessage()));
     }
 }

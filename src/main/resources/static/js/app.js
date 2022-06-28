@@ -23,3 +23,12 @@ app.config(function ($routeProvider) {
         controller: 'LoginController',
         templateUrl: '/template/login.html',});
 });
+
+app.run(function ($rootScope) {
+    $rootScope.$on('$routeChangeStart', function () {
+        if(typeof $rootScope.stompClient !== 'undefined' && $rootScope.stompClient !== null) {
+            $rootScope.stompClient.disconnect();
+            $rootScope.stompClient = null;
+        }
+    })
+})

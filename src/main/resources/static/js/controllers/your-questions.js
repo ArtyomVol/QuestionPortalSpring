@@ -1,4 +1,4 @@
-app.controller("YourQuestionsController", function ($scope, $http) {
+app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
     $scope.user;
 
     $scope.message = {
@@ -40,6 +40,20 @@ app.controller("YourQuestionsController", function ($scope, $http) {
         getUserFromSession();
         let textSizeTest = document.getElementById("text-size-test");
         adjustTextSize("questionsPerPage", $scope.questionsPerPage, textSizeTest, 26);
+        let socket = new SockJS('/question-portal-websocket');
+        $rootScope.stompClient = Stomp.over(socket);
+        $rootScope.stompClient.connect({}, function () {
+            $rootScope.stompClient.subscribe('/question/answer', function (message) {
+                let email = JSON.parse(message.body).message;
+                if (email === $scope.user.email) {
+                    getQuestionsCount("currentPage");
+                }
+            });
+        });
+    }
+
+    function sendMessage(message) {
+        $rootScope.stompClient.send("/ws/question/change", {}, JSON.stringify({'message': message}));
     }
 
     $scope.replaceSelectedUserEmailOnQuestionAdd = function (selectedUserEmail) {
@@ -181,6 +195,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
                     alert(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
+                    sendMessage(newQuestion.forUser.email);
                 }
             );
         }
@@ -208,6 +223,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
                     alert(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
+                    sendMessage($scope.questionForEdit.forUser.email);
                 }
             );
         }
@@ -224,6 +240,7 @@ app.controller("YourQuestionsController", function ($scope, $http) {
         }).then(
             function () {
                 getQuestionsCount("currentPage");
+                sendMessage(question.forUser.email);
             }
         );
     }

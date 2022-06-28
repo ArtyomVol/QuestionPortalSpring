@@ -1,4 +1,4 @@
-app.controller("AnswerTheQuestionController", function ($scope, $http) {
+app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScope) {
     $scope.user;
 
     $scope.message = {
@@ -38,15 +38,20 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
     function pageLoad() {
         getUserFromSession();
         adjustTextSize("questionsPerPage", $scope.questionsPerPage, "text-size-test", 26);
+        let socket = new SockJS('/question-portal-websocket');
+        $rootScope.stompClient = Stomp.over(socket);
+        $rootScope.stompClient.connect({}, function () {
+            $rootScope.stompClient.subscribe('/question/change', function (message) {
+                let email = JSON.parse(message.body).message;
+                if (email === $scope.user.email) {
+                    getQuestionsCount("currentPage");
+                }
+            });
+        });
     }
 
-    $scope.replaceSelectedUserEmailOnQuestionEdit = function (selectedUserEmail) {
-        let currentText = document.getElementById("forUserOnQuestionEdit");
-        let newText = document.getElementById(selectedUserEmail + "Edit");
-        $scope.questionForEdit.forUser =
-            $scope.otherUsers.find(u => u.email === selectedUserEmail);
-        currentText.style.fontSize = newText.style.fontSize;
-        currentText.style.paddingRight = newText.style.paddingRight;
+    function sendMessage(message) {
+        $rootScope.stompClient.send("/ws/question/answer", {}, JSON.stringify({'message': message}));
     }
 
     $scope.replaceSelectedQuestionsPerPage = function (questionsPerPageOption) {
@@ -127,6 +132,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
                     alert(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
+                    sendMessage($scope.questionForEdit.fromUser.email);
                 }
             );
         } else {
@@ -280,4 +286,11 @@ app.controller("AnswerTheQuestionController", function ($scope, $http) {
         let modalWindow = document.getElementsByClassName("modal fade show")[0];
         modalWindow.getElementsByClassName("btn-close")[0].click();
     }
+/*
+    window.onbeforeunload = function()
+    {
+        confirm("Страница закрывается");
+        return "123";
+    }*/
 });
+
