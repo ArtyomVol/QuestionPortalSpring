@@ -65,4 +65,19 @@ public class UserRestService {
         List<UserOnlyEmailDto> otherUsers = userService.getAllOtherUsers(currentUser);
         return new ResponseEntity<>(otherUsers, HttpStatus.IM_USED);
     }
+
+    public ResponseEntity<Message> sendConfirmationCode(String userEmail, HttpServletRequest request) {
+        String confirmationCode = userService.sendConfirmationCode(userEmail);
+        request.getSession().setAttribute("confirmationCode", confirmationCode);
+        return new ResponseEntity<>(new Message("Mail with confirmation code is send for your email."),
+                HttpStatus.IM_USED);
+    }
+
+    public ResponseEntity<Message> changePassword(UserConfirmationCodeDto user,
+                                                  HttpServletRequest request) {
+        String realConfirmationCode = (String) request.getSession().getAttribute("confirmationCode");
+        userService.changePassword(user, realConfirmationCode);
+        return new ResponseEntity<>(new Message("Password is successfully changed."),
+                HttpStatus.IM_USED);
+    }
 }

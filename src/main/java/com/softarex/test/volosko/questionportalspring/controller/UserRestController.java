@@ -57,4 +57,16 @@ public class UserRestController {
     public ResponseEntity<List<UserOnlyEmailDto>> getAllOtherUsers(HttpServletRequest request) {
         return userRestService.getAllOtherUsers(request);
     }
+
+    @GetMapping(value = "/confirmation-code", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Message> sendConfirmationCode(@RequestParam(name = "email") String email,
+                                                        HttpServletRequest request) {
+        return userRestService.sendConfirmationCode(email, request);
+    }
+
+    @PostMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Message> changePassword(@RequestBody UserConfirmationCodeDto user,
+                                                        HttpServletRequest request) {
+        return userRestService.changePassword(user, request);
+    }
 }

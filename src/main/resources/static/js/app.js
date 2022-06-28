@@ -18,9 +18,9 @@ app.config(function ($routeProvider) {
     }).when('/questions/answer', {
         templateUrl: '/template/answer-the-question.html',
         controller: 'AnswerTheQuestionController'
-    }).when('/forget-password', {
-        templateUrl: '/template/answer-the-question.html',
-        controller: 'AnswerTheQuestionController'
+    }).when('/forgot-password', {
+        templateUrl: '/template/forgot-password.html',
+        controller: 'ForgotPasswordController'
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',

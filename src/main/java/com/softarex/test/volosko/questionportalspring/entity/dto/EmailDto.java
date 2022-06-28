@@ -36,6 +36,15 @@ public class EmailDto {
         return simpleMailMessage;
     }
 
+    public SimpleMailMessage initializePasswordChangeMail(String confirmationCode) {
+        emailFrom = EmailConstants.EMAIL_FROM_ADDRESS;
+        message = EmailConstants.PASSWORD_CHANGE_MESSAGE.replaceFirst("§1§", confirmationCode);
+        mailSubject = EmailConstants.PASSWORD_CHANGE_SUBJECT;
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        setParametersToSimpleMailMessage(simpleMailMessage);
+        return simpleMailMessage;
+    }
+
     private void setParametersToSimpleMailMessage(SimpleMailMessage simpleMailMessage) {
         simpleMailMessage.setFrom(emailFrom);
         simpleMailMessage.setTo(emailTo);
