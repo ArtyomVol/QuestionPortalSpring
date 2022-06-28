@@ -260,7 +260,7 @@
 
 .dropdown-selected-element-btn-text {
     font-size: 16px;
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .dropdown-elements-btn {
@@ -270,13 +270,13 @@
 .dropdown-elements-btn-text {
     padding-left: 8px;
     font-size: 16px;
-    padding-right: 0px
+    padding-right: 0;
 }
 
 .modal-input {
     width: 50%;
     margin-left: 6px;
-    height: 34px
+    height: 34px;
 }
 
 .not-bold {
@@ -319,7 +319,7 @@
 }
 
 .questions-id-in-page {
-    padding-right: 30px; width: 9.5%; padding-left: 0px;
+    padding-right: 30px; width: 9.5%; padding-left: 0;
 }
 
 .question-per-page {
@@ -341,8 +341,7 @@
 .dropdown-combobox-btn {
     padding: 0;
     width: 100%;
-    border-color: lightgray;
-    border: 1px;
+    border: 1px lightgray;
 }
 
 .datetimepicker {
