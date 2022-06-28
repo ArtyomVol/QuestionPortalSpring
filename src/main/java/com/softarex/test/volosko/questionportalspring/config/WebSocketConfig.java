@@ -1,4 +1,4 @@
-package com.softarex.test.volosko.questionportalspring;
+package com.softarex.test.volosko.questionportalspring.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
