@@ -1,10 +1,6 @@
 app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
     $scope.user;
 
-    $scope.message = {
-        message: ""
-    };
-
     $scope.questions = [];
     $scope.answerTypes = [];
     $scope.otherUsers = [];

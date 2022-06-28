@@ -8,10 +8,6 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
         phoneNumber: ""
     };
 
-    $scope.errorMessage = {
-        message: ""
-    };
-
     pageLoad();
 
     $scope.login = function () {
@@ -35,8 +31,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                 window.location = "/#!/questions/your";
             },
             function (response) {
-                $scope.errorMessage = response.data;
-                alert($scope.errorMessage.message);
+                alert(response.data.message);
                 clearFormData();
             }
         );

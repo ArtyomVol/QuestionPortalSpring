@@ -1,10 +1,6 @@
 app.controller("DeleteProfileController", function ($scope, $http) {
     $scope.password = "";
 
-    $scope.message = {
-        message: ""
-    };
-
     pageLoad();
 
     function pageLoad() {
@@ -46,8 +42,7 @@ app.controller("DeleteProfileController", function ($scope, $http) {
             function (response) {
                 document.getElementById("delete_btn").removeAttribute("disabled");
                 document.getElementById("loader").style.display = "none";
-                $scope.message = response.data;
-                alert($scope.message.message);
+                alert(response.data.message);
                 clearFormData();
             }
         );

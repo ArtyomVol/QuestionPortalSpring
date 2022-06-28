@@ -9,10 +9,6 @@ app.controller("RegistrationController", function ($scope, $http) {
         phoneNumber: ""
     };
 
-    $scope.message = {
-        message: ""
-    };
-
     pageLoad();
 
     $scope.createUser = function () {
@@ -34,8 +30,7 @@ app.controller("RegistrationController", function ($scope, $http) {
                 function (response) {
                     document.getElementById("sign_btn").removeAttribute("disabled");
                     document.getElementById("loader").style.display = "none";
-                    $scope.message = response.data;
-                    alert($scope.message.message);
+                    alert(response.data.message);
                 }
             );
         } else {
