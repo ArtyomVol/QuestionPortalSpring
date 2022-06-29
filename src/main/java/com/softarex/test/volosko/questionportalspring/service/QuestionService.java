@@ -3,7 +3,9 @@ package com.softarex.test.volosko.questionportalspring.service;
 import com.softarex.test.volosko.questionportalspring.entity.Question;
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.entity.dto.QuestionDto;
-import com.softarex.test.volosko.questionportalspring.exception.UserCanNotDeleteQuestion;
+import com.softarex.test.volosko.questionportalspring.exception.question.UserCanNotAddQuestionException;
+import com.softarex.test.volosko.questionportalspring.exception.question.UserCanNotChangeQuestionException;
+import com.softarex.test.volosko.questionportalspring.exception.question.UserCanNotDeleteQuestionException;
 import com.softarex.test.volosko.questionportalspring.exception.UserIsNotAuthorizedException;
 import com.softarex.test.volosko.questionportalspring.mapper.QuestionMapper;
 import com.softarex.test.volosko.questionportalspring.repository.QuestionRepository;
@@ -38,8 +40,17 @@ public class QuestionService {
         return convertQuestionListToQuestionDtoList(questionRepository.getQuestionsByForUserOrderById(forUser));
     }
 
-    public void createQuestion(QuestionDto questionDto) {
-        questionRepository.save(questionMapper.questionDtoToEntityWithoutId(questionDto));
+    public void createQuestion(QuestionDto questionDto, User user) {
+        if (user == null){
+            throw new UserIsNotAuthorizedException();
+        }
+        else {
+            if (user.getEmail().equals(questionDto.getFromUser().getEmail())) {
+                questionRepository.save(questionMapper.questionDtoToEntityWithoutId(questionDto));
+            } else {
+                throw new UserCanNotAddQuestionException(user.getEmail());
+            }
+        }
     }
 
     public void deleteQuestionById(long id, User user) {
@@ -48,13 +59,22 @@ public class QuestionService {
         }
         int deletedRowsCount = questionRepository.deleteByIdAndFromUser(id, user);
         if (deletedRowsCount == 0){
-            throw new UserCanNotDeleteQuestion(user.getEmail());
+            throw new UserCanNotDeleteQuestionException(user.getEmail());
         }
     }
 
-    public void editQuestion(QuestionDto questionDto) {
-        Question question = questionMapper.questionDtoToEntityWithId(questionDto);
-        questionRepository.save(question);
+    public void editQuestion(QuestionDto questionDto, User user) {
+        if (user == null){
+            throw new UserIsNotAuthorizedException();
+        }
+        else {
+            if (user.getEmail().equals(questionDto.getFromUser().getEmail())) {
+                Question question = questionMapper.questionDtoToEntityWithId(questionDto);
+                questionRepository.save(question);
+            } else {
+                throw new UserCanNotChangeQuestionException(user.getEmail());
+            }
+        }
     }
 
     public List<QuestionDto> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum) {

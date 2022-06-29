@@ -59,8 +59,8 @@ public class QuestionRestController {
     }
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Message> createQuestion(@RequestBody QuestionDto question) {
-        return questionRestService.createQuestion(question);
+    public ResponseEntity<Message> createQuestion(@RequestBody QuestionDto question, HttpServletRequest request) {
+        return questionRestService.createQuestion(question, request);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,8 +69,8 @@ public class QuestionRestController {
     }
 
     @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Message> editQuestion(@RequestBody QuestionDto question) {
-        return questionRestService.editQuestion(question);
+    public ResponseEntity<Message> editQuestion(@RequestBody QuestionDto question, HttpServletRequest request) {
+        return questionRestService.editQuestion(question, request);
     }
 
     @MessageMapping("/question/answer")

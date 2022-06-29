@@ -49,8 +49,9 @@ public class QuestionRestService {
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
-    public ResponseEntity<Message> createQuestion(QuestionDto question) {
-        questionService.createQuestion(question);
+    public ResponseEntity<Message> createQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.createQuestion(question, user);
         return new ResponseEntity<>(new Message("Question is successfully created"), HttpStatus.CREATED);
     }
 
@@ -72,8 +73,9 @@ public class QuestionRestService {
         return new ResponseEntity<>(questionsCount, HttpStatus.OK);
     }
 
-    public ResponseEntity<Message> editQuestion(QuestionDto question) {
-        questionService.editQuestion(question);
+    public ResponseEntity<Message> editQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.editQuestion(question, user);
         return new ResponseEntity<>(new Message("Question is successfully edited"), HttpStatus.CREATED);
     }
 }
