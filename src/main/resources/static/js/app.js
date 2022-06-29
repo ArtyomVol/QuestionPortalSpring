@@ -24,14 +24,19 @@ app.config(function ($routeProvider) {
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',
-        templateUrl: '/template/login.html',});
+        templateUrl: '/template/login.html',
+    });
 });
 
 app.run(function ($rootScope) {
     $rootScope.$on('$routeChangeStart', function () {
-        if(typeof $rootScope.stompClient !== 'undefined' && $rootScope.stompClient !== null) {
+        if (typeof $rootScope.stompClient !== 'undefined' && $rootScope.stompClient !== null) {
             $rootScope.stompClient.disconnect();
             $rootScope.stompClient = null;
         }
-    })
+    });
+
+    $rootScope.closeAlert = function () {
+        closeAlert();
+    };
 })

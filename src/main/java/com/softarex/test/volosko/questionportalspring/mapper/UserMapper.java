@@ -16,7 +16,7 @@ public final class UserMapper {
 
     public static UserSessionDto userEntityToUserSessionDto(User user) {
         if (user != null) {
-            return new UserSessionDto(user.getEmail(), user.getFirstName(), user.getLastName());
+            return new UserSessionDto(user.getEmail(), user.getFirstName(), user.getLastName(), user.getPhoneNumber());
         }
         return null;
     }

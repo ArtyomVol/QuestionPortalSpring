@@ -165,7 +165,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
     $scope.addQuestion = function () {
         let errorMsg = checkQuestionFields($scope.questionText, $scope.selectedAnswerType, $scope.options);
         if (errorMsg !== "") {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         } else {
             let newQuestion = {
                 fromUser: $scope.user,
@@ -187,7 +187,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 }
             }).then(
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
                     sendMessage(newQuestion.forUser.email);
@@ -200,7 +200,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
         let errorMsg = checkQuestionFields($scope.questionForEdit.questionText, $scope.questionForEdit.answerType.type,
             $scope.questionForEdit.answerOptions);
         if (errorMsg !== "") {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         } else {
             if ($scope.answerTypesWithoutOptions.includes($scope.questionForEdit.answerType.type)) {
                 $scope.questionForEdit.answerOptions = "";
@@ -215,7 +215,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 }
             }).then(
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
                     sendMessage($scope.questionForEdit.forUser.email);
@@ -285,7 +285,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 $scope.questions = response.data;
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );
@@ -303,7 +303,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 $scope.questions = response.data;
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );
@@ -322,7 +322,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
                 modifyPagination(buttonId);
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );

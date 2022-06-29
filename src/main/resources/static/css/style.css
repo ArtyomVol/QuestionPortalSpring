@@ -352,3 +352,56 @@
     width: 100%;
     margin: 0;
 }
+
+#dialogoverlay {
+    display: none;
+    opacity: .8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #FFF;
+    width: 100%;
+    z-index: 10;
+}
+
+#dialogbox {
+    display: none;
+    position: fixed;
+    background: gray;
+    border-radius: 6px;
+    width: 550px;
+    z-index: 10;
+}
+
+#dialogbox>div {
+    background: gray;
+    margin: 2px;
+}
+
+#dialogbox>div>#dialogboxhead {
+    background: #fafafa;
+    font-size: 19px;
+    padding: 10px;
+    color: black;
+    border-radius: 6px 6px 0 0;
+}
+
+#dialogbox>div>#dialogboxbody {
+    background: white;
+    padding: 20px;
+    color: black;
+}
+
+#dialogbox>div>#dialogboxfoot {
+    background: #fafafa;
+    padding: 10px;
+    text-align: right;
+    border-radius: 0 0 6px 6px;
+}
+
+.btn-ok {
+    border-radius: 6px;
+    width: 10%;
+    font-weight: bold;
+    border-color: gray;
+}

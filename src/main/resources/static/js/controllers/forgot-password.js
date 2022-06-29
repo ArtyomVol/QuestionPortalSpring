@@ -29,13 +29,13 @@ app.controller("ForgotPasswordController", function ($scope, $http) {
             }
         }).then(
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message);
                 $scope.mailIsSend = true;
                 document.getElementById("btn").removeAttribute("disabled");
                 document.getElementById("loader").style.display = "none";
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 document.getElementById("btn").removeAttribute("disabled");
                 document.getElementById("loader").style.display = "none";
             }
@@ -54,18 +54,18 @@ app.controller("ForgotPasswordController", function ($scope, $http) {
                 }
             }).then(
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message);
                     window.location = "/#!/login";
                 },
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message, "Error");
                     $scope.user.confirmationCode = "";
                     clearFormData();
                 }
             );
         }
         else {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         }
     }
 

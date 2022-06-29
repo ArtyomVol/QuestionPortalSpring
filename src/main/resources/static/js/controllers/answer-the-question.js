@@ -125,14 +125,14 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
                 }
             }).then(
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message);
                     closeModal();
                     getQuestionsCount("currentPage");
                     sendMessage($scope.questionForEdit.fromUser.email);
                 }
             );
         } else {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         }
     }
 
@@ -177,7 +177,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
                 $scope.questions = response.data;
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );
@@ -196,7 +196,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
                 $scope.questions = response.data;
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );
@@ -216,7 +216,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
                 modifyPagination(buttonId);
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 window.location = "/#!/login";
             }
         );

@@ -28,7 +28,7 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                 window.location = "/#!/questions/your";
             },
             function (response) {
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 clearFormData();
             }
         );

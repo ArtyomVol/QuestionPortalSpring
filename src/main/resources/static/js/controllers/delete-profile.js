@@ -42,7 +42,7 @@ app.controller("DeleteProfileController", function ($scope, $http) {
             function (response) {
                 document.getElementById("delete_btn").removeAttribute("disabled");
                 document.getElementById("loader").style.display = "none";
-                alert(response.data.message);
+                alertModify(response.data.message, "Error");
                 clearFormData();
             }
         );

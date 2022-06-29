@@ -127,7 +127,7 @@ The server-side classes are divided into:
             * UserLoginDto (email, password)
             * UserOnlyEmailDto (email)
             * UserRegistrationDto (email, password, firstName, lastName, phoneNumber)
-            * UserSessionDto (email, firstName, lastName)
+            * UserSessionDto (email, firstName, lastName, phoneNumber)
             * UserUpdateDto (email, password, newPassword, firstName, lastName, phoneNumber)
         * AnswerTypeDto - (type)
         * EmailDto (emailTo, emailFrom, message, mailSubject) - this class also contains methods for preparing data for

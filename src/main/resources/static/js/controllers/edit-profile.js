@@ -11,6 +11,10 @@ app.controller("EditProfileController", function ($scope, $http) {
     pageLoad();
 
     function pageLoad() {
+        getUserDataFromServer()
+    }
+
+    function getUserDataFromServer(){
         $http({
             method: 'GET',
             url: '/api/v1/users/from/session',
@@ -49,15 +53,17 @@ app.controller("EditProfileController", function ($scope, $http) {
                     'Content-Type': 'application/json'
                 }
             }).then(
-                function () {
-                    pageLoad();
+                function (response) {
+                    alertModify(response.data.message);
+                    getUserDataFromServer();
                 },
                 function (response) {
-                    alert(response.data.message);
+                    alertModify(response.data.message, "Error");
+                    clearFormData();
                 }
             );
         } else {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         }
     }
 

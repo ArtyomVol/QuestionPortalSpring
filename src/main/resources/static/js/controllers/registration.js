@@ -30,11 +30,11 @@ app.controller("RegistrationController", function ($scope, $http) {
                 function (response) {
                     document.getElementById("sign_btn").removeAttribute("disabled");
                     document.getElementById("loader").style.display = "none";
-                    alert(response.data.message);
+                    alertModify(response.data.message, "Error");
                 }
             );
         } else {
-            alert(errorMsg);
+            alertModify(errorMsg, "Error");
         }
     }
 
