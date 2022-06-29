@@ -3,9 +3,6 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
     $scope.user = {
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        phoneNumber: ""
     };
 
     pageLoad();
