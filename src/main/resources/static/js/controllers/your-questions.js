@@ -49,7 +49,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
     }
 
     function sendMessage(message) {
-        $rootScope.stompClient.send("/ws/question/change", {}, JSON.stringify({'message': message}));
+        $rootScope.stompClient.send("/ws/question/change", {}, angular.toJson({'message': message}));
     }
 
     $scope.replaceSelectedUserEmailOnQuestionAdd = function (selectedUserEmail) {

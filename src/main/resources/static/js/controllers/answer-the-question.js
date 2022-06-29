@@ -47,7 +47,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
     }
 
     function sendMessage(message) {
-        $rootScope.stompClient.send("/ws/question/answer", {}, JSON.stringify({'message': message}));
+        $rootScope.stompClient.send("/ws/question/answer", {}, angular.toJson({'message': message}));
     }
 
     $scope.replaceSelectedQuestionsPerPage = function (questionsPerPageOption) {
@@ -117,7 +117,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
         let errorMsg = enterQuestionAnswer();
         if (errorMsg === "") {
             $http({
-                method: 'PUT',
+                method: 'PATCH',
                 url: '/api/v1/questions/',
                 data: angular.toJson($scope.questionForEdit),
                 headers: {
