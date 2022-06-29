@@ -1,4 +1,4 @@
-package com.softarex.test.volosko.questionportalspring.exception;
+package com.softarex.test.volosko.questionportalspring.exception.registration;
 
 public class UserAlreadyExistsException extends UserRegistrationException {
     public UserAlreadyExistsException(String email) {

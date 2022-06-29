@@ -1,4 +1,4 @@
-package com.softarex.test.volosko.questionportalspring.exception;
+package com.softarex.test.volosko.questionportalspring.exception.login;
 
 public class UserIsMissingException extends UserLoginException {
     public UserIsMissingException(String email) {
