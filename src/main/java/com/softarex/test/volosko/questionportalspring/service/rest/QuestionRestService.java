@@ -78,4 +78,10 @@ public class QuestionRestService {
         questionService.editQuestion(question, user);
         return new ResponseEntity<>(new Message("Question is successfully edited"), HttpStatus.CREATED);
     }
+
+    public ResponseEntity<Message> answerQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.answerQuestion(question, user);
+        return new ResponseEntity<>(new Message("Question is successfully answered"), HttpStatus.CREATED);
+    }
 }

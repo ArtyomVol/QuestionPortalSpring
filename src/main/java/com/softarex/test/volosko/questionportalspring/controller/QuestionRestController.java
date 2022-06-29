@@ -73,6 +73,11 @@ public class QuestionRestController {
         return questionRestService.editQuestion(question, request);
     }
 
+    @PatchMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Message> answerQuestion(@RequestBody QuestionDto question, HttpServletRequest request) {
+        return questionRestService.answerQuestion(question, request);
+    }
+
     @MessageMapping("/question/answer")
     @SendTo("/question/answer")
     public Message reportQuestionHasBeenAnswered(Message userEmailWhoseQuestionWasAnswered) {

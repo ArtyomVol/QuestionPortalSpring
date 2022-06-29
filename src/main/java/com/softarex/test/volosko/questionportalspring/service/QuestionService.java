@@ -77,6 +77,20 @@ public class QuestionService {
         }
     }
 
+    public void answerQuestion(QuestionDto questionDto, User user) {
+        if (user == null){
+            throw new UserIsNotAuthorizedException();
+        }
+        else {
+            if (user.getEmail().equals(questionDto.getForUser().getEmail())) {
+                Question question = questionMapper.questionDtoToEntityWithId(questionDto);
+                questionRepository.save(question);
+            } else {
+                throw new UserCanNotChangeQuestionException(user.getEmail());
+            }
+        }
+    }
+
     public List<QuestionDto> getQuestionsByFromUserWithPagination(User fromUser, int questionsPerPage, int pageNum) {
         List<Question> questionsDao;
         int offset;
