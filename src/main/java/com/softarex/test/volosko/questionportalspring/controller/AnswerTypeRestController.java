@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/answer/types")
-public class AnswerTypeController {
+public class AnswerTypeRestController {
     private final AnswerTypeRestService answerTypeRestService;
 
     @Autowired
-    public AnswerTypeController(AnswerTypeRestService answerTypeRestService){
+    public AnswerTypeRestController(AnswerTypeRestService answerTypeRestService){
         this.answerTypeRestService = answerTypeRestService;
     }
 
