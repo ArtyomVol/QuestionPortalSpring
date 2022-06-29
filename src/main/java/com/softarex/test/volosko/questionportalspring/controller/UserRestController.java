@@ -18,10 +18,9 @@ public class UserRestController {
     private final UserRestService userRestService;
 
     @Autowired
-    public UserRestController(UserRestService userRestService){
+    public UserRestController(UserRestService userRestService) {
         this.userRestService = userRestService;
     }
-
 
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Message> signIn(@RequestBody UserRegistrationDto user) {
@@ -66,7 +65,7 @@ public class UserRestController {
 
     @PostMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Message> changePassword(@RequestBody UserConfirmationCodeDto user,
-                                                        HttpServletRequest request) {
+                                                  HttpServletRequest request) {
         return userRestService.changePassword(user, request);
     }
 }

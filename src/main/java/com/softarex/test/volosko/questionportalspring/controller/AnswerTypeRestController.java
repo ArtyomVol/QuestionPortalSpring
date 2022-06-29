@@ -17,7 +17,7 @@ public class AnswerTypeRestController {
     private final AnswerTypeRestService answerTypeRestService;
 
     @Autowired
-    public AnswerTypeRestController(AnswerTypeRestService answerTypeRestService){
+    public AnswerTypeRestController(AnswerTypeRestService answerTypeRestService) {
         this.answerTypeRestService = answerTypeRestService;
     }
 

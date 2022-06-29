@@ -7,6 +7,10 @@ import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserOnlyEm
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserRegistrationDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserUpdateDto;
 import com.softarex.test.volosko.questionportalspring.exception.*;
+import com.softarex.test.volosko.questionportalspring.exception.login.UserIsMissingException;
+import com.softarex.test.volosko.questionportalspring.exception.login.UserLoginException;
+import com.softarex.test.volosko.questionportalspring.exception.registration.InvalidMailFormatException;
+import com.softarex.test.volosko.questionportalspring.exception.registration.UserAlreadyExistsException;
 import com.softarex.test.volosko.questionportalspring.mapper.UserMapper;
 import com.softarex.test.volosko.questionportalspring.repository.UserRepository;
 import com.softarex.test.volosko.questionportalspring.util.PasswordGenerator;
