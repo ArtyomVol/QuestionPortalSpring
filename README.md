@@ -39,7 +39,7 @@ git clone https://github.com/ArtyomVol/QuestionPortalSpring
 ```
 
 * Change data in a
-  file [src/main/resources/application.properties](https://github.com/ArtyomVol/QuestionPortalSpring/blob/master/src/main/resources/application.properties)
+  file [src/main/resources/application.properties](src/main/resources/application.properties)
 
 ```properties
 # if the port is busy/in use, change it
@@ -58,7 +58,7 @@ spring.datasource.password=01112001
 * After indexing click 'Add Configuration...' --> 'Add new...' --> 'Spring Boot'.
 * Give the name to your configuration
 * Select Main class
-  as [file](https://github.com/ArtyomVol/QuestionPortalSpring/blob/develop/src/main/java/com/softarex/test/volosko/questionportalspring/QuestionPortalSpringApplication.java)
+  as [file](src/main/java/com/softarex/test/volosko/questionportalspring/QuestionPortalSpringApplication.java)
   or com.softarex.test.volosko.questionportalspring.QuestionPortalSpringApplication
 * And run
 * Go to the url http://localhost:8081/#!/
@@ -69,17 +69,23 @@ ___
 
 The server-side classes are divided into:
 
-* config
-    * WebSocketConfig - websocket configuration class with methods:
+* [config](src/main/java/com/softarex/test/volosko/questionportalspring/config)
+    * [WebSocketConfig](src/main/java/com/softarex/test/volosko/questionportalspring/config/WebSocketConfig.java) - 
+websocket configuration class with methods:
         * configureMessageBroker - configures message broker settings
         * registerStompEndpoints - registers a STOMP endpoint and maps it to a specific URL.
-* constants
-    * EmailConstants - class, that contains the constants needed to fill out the email before sending it.
-* controller - controller classes, that process messages from the client and return the desired result.
-    * AnswerTypeRestController - controller class, with method:
+* [constants](src/main/java/com/softarex/test/volosko/questionportalspring/constants)
+    * [EmailConstants](src/main/java/com/softarex/test/volosko/questionportalspring/constants/EmailConstants.java) - 
+class, that contains the constants needed to fill out the email before sending it.
+* [controller](src/main/java/com/softarex/test/volosko/questionportalspring/controller) - controller classes, that 
+process messages from the client and return the desired result.
+    * [AnswerTypeRestController](src/main/java/com/softarex/test/volosko/questionportalspring/controller/AnswerTypeRestController.java) - 
+controller class, with method:
         * getAll() - receiving all types of responses (List<AnswerTypeDto>).
-    * ErrorController - controller class, that sends error message if it occurs.
-    * QuestionRestController - controller class, with methods:
+    * [ErrorController](src/main/java/com/softarex/test/volosko/questionportalspring/controller/ErrorController.java) - 
+controller class, that sends error message if it occurs.
+    * [QuestionRestController](src/main/java/com/softarex/test/volosko/questionportalspring/controller/QuestionRestController.java) - 
+controller class, with methods:
         * getAllQuestionsFromSessionUser(HttpServletRequest request) - getting all questions asked by an authenticated
           user
           (List<QuestionDto>).
@@ -107,7 +113,8 @@ The server-side classes are divided into:
         * reportQuestionHasBeenChanged(Message userEmailWhoseQuestionWasAnswered) - method that receives the email of
           the user whose question was asked/changed/deleted, and it is sent to all users whose websocket is listening,
           whether someone asked/changed/deleted the question (Message).
-    * UserRestController - controller class with methods:
+    * [UserRestController](src/main/java/com/softarex/test/volosko/questionportalspring/controller/UserRestController.java) - 
+controller class with methods:
         * signIn(UserRegistrationDto user) - adding user to database and send message to email (Message).
         * logIn(UserLoginDto userData, HttpServletRequest request) - authenticate user and add to session (Message).
         * changeUserData(UserUpdateDto userUpdateDto, HttpServletRequest request) - change data of user (Message).
@@ -119,63 +126,85 @@ The server-side classes are divided into:
         * sendConfirmationCode(String email, HttpServletRequest request) - send message to email (Message).
         * changePassword(UserConfirmationCodeDto user, HttpServletRequest request) - change password of user
           (Message).
-* entity - entity classes
-    * dto - dto classes for passing data between the server and client parts (class fields will be written in
+* [entity](src/main/java/com/softarex/test/volosko/questionportalspring/entity) - entity classes
+    * [dto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto) - dto classes for passing data 
+between the server and client parts (class fields will be written in
       parentheses)
-        * user - dto classes for user data
-            * UserConfirmationCodeDto (email, newPassword, confirmationCode)
-            * UserLoginDto (email, password)
-            * UserOnlyEmailDto (email)
-            * UserRegistrationDto (email, password, firstName, lastName, phoneNumber)
-            * UserSessionDto (email, firstName, lastName, phoneNumber)
-            * UserUpdateDto (email, password, newPassword, firstName, lastName, phoneNumber)
-        * AnswerTypeDto - (type)
-        * EmailDto (emailTo, emailFrom, message, mailSubject) - this class also contains methods for preparing data for
-          transmission by e-mail by using class SimpleMailMessage (registry, profile deleting and change password
-          emails)
-        * Message (message)
-        * QuestionDto (id, fromUser, forUser, questionText, answerType, answerOptions, answer)
-    * AnswerType - dao class, whose fields correspond to a table answer_type in the database.
-    * Question - dao class, whose fields correspond to a table question in the database.
-    * User - dao class, whose fields correspond to a table user in the database.
-* exception - exception classes created for events in the application.
-    * login
-        * UserIsMissingException
-        * UserLoginException
-    * question
-        * UserCanNotActionWithThisQuestionException
-        * UserCanNotAddQuestionException
-        * UserCanNotChangeQuestionException
-        * UserCanNotDeleteQuestionException
-    * registration
-        * InvalidMailFormatException
-        * UserAlreadyExistsException
-        * UserRegistrationException
-    * QuestionPortalException - main exception class, that extends RuntimeException.
-    * UserChangeException (extends QuestionPortalException)
-    * UserIsNotAuthorizedException (extends QuestionPortalException)
-    * UserWrongPasswordException (extends UserChangeException)
-    * WrongConfirmationCodeException (extends QuestionPortalException)
-* mapper - mapper classes, that are designed to transform objects of dao classes into objects of dto classes and vice
-  versa.
-    * AnswerTypeMapper
-    * QuestionMapper
-    * UserMapper
-* repository - repository classes, that are designed to send queries to the database and return the appropriate results.
-  They contain default methods obtained by inheriting the CrudRepository class (Other methods are indicated in
-  parentheses).
-    * AnswerTypeRepository (search by type)
-    * QuestionRepository (search for all questions, a certain number of questions starting from a certain number of
-      them, by sender or recipient, deleting a question by its id and sender's id)
-    * UserRepository (search by email, search for all users except the user with email)
-* service - service classes, that executing business logic on the corresponding entity.
-    * rest - intermediate classes between controllers and services.
-        * AnswerTypeRestService
-        * QuestionRestService
-        * UserRestService
-    * AnswerTypeService
-    * QuestionService
-    * UserService
-* util
-    * PasswordGenerator - class for generating random passwords
-* QuestionPortalSpringApplication
+        * [user](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user) - dto classes for user 
+    data
+            * [UserConfirmationCodeDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserConfirmationCodeDto.java)
+        (email, newPassword, confirmationCode)
+            * [UserLoginDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserLoginDto.java) 
+        (email, password)
+            * [UserOnlyEmailDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserOnlyEmailDto.java) 
+        (email)
+            * [UserRegistrationDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserRegistrationDto.java) 
+        (email, password, firstName, lastName, phoneNumber)
+            * [UserSessionDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserSessionDto.java)
+        (email, firstName, lastName, phoneNumber)
+            * [UserUpdateDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/user/UserUpdateDto.java)
+        (email, password, newPassword, firstName, lastName, phoneNumber)
+        * [AnswerTypeDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/AnswerTypeDto.java) - 
+(type)
+        * [EmailDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/EmailDto.java) (emailTo, 
+    emailFrom, message, mailSubject) - this class also contains methods for preparing data for transmission by e-mail 
+    by using class SimpleMailMessage (registry, profile deleting and change password emails)
+        * [Message](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/Message.java) (message)
+        * [QuestionDto](src/main/java/com/softarex/test/volosko/questionportalspring/entity/dto/QuestionDto.java) (id, 
+    fromUser, forUser, questionText, answerType, answerOptions, answer)
+    * [AnswerType](src/main/java/com/softarex/test/volosko/questionportalspring/entity/AnswerType.java) - dao class, 
+whose fields correspond to a table answer_type in the database.
+    * [Question](src/main/java/com/softarex/test/volosko/questionportalspring/entity/Question.java) - dao class, whose 
+fields correspond to a table question in the database.
+    * [User](src/main/java/com/softarex/test/volosko/questionportalspring/entity/User.java) - dao class, whose fields
+correspond to a table user in the database.
+* [exception](src/main/java/com/softarex/test/volosko/questionportalspring/exception) - exception classes created for 
+events in the application.
+    * [login](src/main/java/com/softarex/test/volosko/questionportalspring/exception/login)
+        * [UserIsMissingException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/login/UserIsMissingException.java)
+        * [UserLoginException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/login/UserLoginException.java)
+    * [question](src/main/java/com/softarex/test/volosko/questionportalspring/exception/question)
+        * [UserCanNotActionWithThisQuestionException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/question/UserCanNotActionWithThisQuestionException.java)
+        * [UserCanNotAddQuestionException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/question/UserCanNotAddQuestionException.java)
+        * [UserCanNotChangeQuestionException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/question/UserCanNotChangeQuestionException.java)
+        * [UserCanNotDeleteQuestionException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/question/UserCanNotDeleteQuestionException.java)
+    * [registration](src/main/java/com/softarex/test/volosko/questionportalspring/exception/registration)
+        * [InvalidMailFormatException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/registration/InvalidMailFormatException.java)
+        * [UserAlreadyExistsException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/registration/UserAlreadyExistsException.java)
+        * [UserRegistrationException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/registration/UserRegistrationException.java)
+    * [QuestionPortalException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/QuestionPortalException.java) - 
+main exception class, that extends RuntimeException.
+    * [UserChangeException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/UserChangeException.java)
+    * [UserIsNotAuthorizedException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/UserIsNotAuthorizedException.java)
+    * [UserWrongPasswordException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/UserWrongPasswordException.java)
+    * [WrongConfirmationCodeException](src/main/java/com/softarex/test/volosko/questionportalspring/exception/WrongConfirmationCodeException.java)
+* [mapper](src/main/java/com/softarex/test/volosko/questionportalspring/mapper) - mapper classes, that are designed to 
+transform objects of dao classes into objects of dto classes and vice versa.
+    * [AnswerTypeMapper](src/main/java/com/softarex/test/volosko/questionportalspring/mapper/AnswerTypeMapper.java)
+    * [QuestionMapper](src/main/java/com/softarex/test/volosko/questionportalspring/mapper/QuestionMapper.java)
+    * [UserMapper](src/main/java/com/softarex/test/volosko/questionportalspring/mapper/UserMapper.java)
+* [repository](src/main/java/com/softarex/test/volosko/questionportalspring/repository) - repository classes, that are 
+designed to send queries to the database and return the appropriate results. They contain default methods obtained by 
+inheriting the CrudRepository class (Other methods are indicated in parentheses).
+    * [AnswerTypeRepository](src/main/java/com/softarex/test/volosko/questionportalspring/repository/AnswerTypeRepository.java) 
+(search by type)
+    * [QuestionRepository](src/main/java/com/softarex/test/volosko/questionportalspring/repository/QuestionRepository.java) 
+(search for all questions, a certain number of questions starting from a certain number of them, by sender or recipient,
+deleting a question by its id and sender's id)
+    * [UserRepository](src/main/java/com/softarex/test/volosko/questionportalspring/repository/UserRepository.java) 
+(search by email, search for all users except the user with email)
+* [service](src/main/java/com/softarex/test/volosko/questionportalspring/service) - service classes, that executing 
+business logic on the corresponding entity.
+    * [rest](src/main/java/com/softarex/test/volosko/questionportalspring/service/rest) - intermediate classes between
+controllers and services.
+        * [AnswerTypeRestService](src/main/java/com/softarex/test/volosko/questionportalspring/service/rest/AnswerTypeRestService.java)
+        * [QuestionRestService](src/main/java/com/softarex/test/volosko/questionportalspring/service/rest/QuestionRestService.java)
+        * [UserRestService](src/main/java/com/softarex/test/volosko/questionportalspring/service/rest/UserRestService.java)
+    * [AnswerTypeService](src/main/java/com/softarex/test/volosko/questionportalspring/service/AnswerTypeService.java)
+    * [QuestionService](src/main/java/com/softarex/test/volosko/questionportalspring/service/QuestionService.java)
+    * [UserService](src/main/java/com/softarex/test/volosko/questionportalspring/service/UserService.java)
+* [util](src/main/java/com/softarex/test/volosko/questionportalspring/util)
+    * [PasswordGenerator](src/main/java/com/softarex/test/volosko/questionportalspring/util/PasswordGenerator.java) - 
+class for generating random passwords
+* [QuestionPortalSpringApplication](src/main/java/com/softarex/test/volosko/questionportalspring/QuestionPortalSpringApplication.java) -
+Class to bootstrap and run a Spring application
