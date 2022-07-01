@@ -339,7 +339,7 @@ app.controller("YourQuestionsController", function ($scope, $http, $rootScope) {
         } else {
             getQuestions();
         }
-        document.getElementsByClassName("pagination")[0].attributes.removeNamedItem("hidden");
+        document.getElementsByClassName("pagination")[0].removeAttribute("hidden");
     }
 
     function getAllOtherUsers() {

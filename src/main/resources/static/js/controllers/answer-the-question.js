@@ -233,7 +233,7 @@ app.controller("AnswerTheQuestionController", function ($scope, $http, $rootScop
         } else {
             getQuestions();
         }
-        document.getElementsByClassName("pagination")[0].attributes.removeNamedItem("hidden");
+        document.getElementsByClassName("pagination")[0].removeAttribute("hidden");
     }
 
     $scope.logout = function () {
