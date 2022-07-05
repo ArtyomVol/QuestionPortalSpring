@@ -6,17 +6,37 @@ app.config(function ($routeProvider) {
     }).when('/login', {
         templateUrl: '/template/login.html',
         controller: 'LoginController'
-    }).when('/edit_profile', {
-        templateUrl: '/template/edit_profile.html',
+    }).when('/profile/edit', {
+        templateUrl: '/template/edit-profile.html',
         controller: 'EditProfileController'
-    }).when('/delete_profile', {
-        templateUrl: '/template/delete_profile.html',
+    }).when('/profile/delete', {
+        templateUrl: '/template/delete-profile.html',
         controller: 'DeleteProfileController'
-    }).when('/your_questions', {
-        templateUrl: '/template/your_questions.html',
+    }).when('/questions/your', {
+        templateUrl: '/template/your-questions.html',
         controller: 'YourQuestionsController'
+    }).when('/questions/answer', {
+        templateUrl: '/template/answer-the-question.html',
+        controller: 'AnswerTheQuestionController'
+    }).when('/forgot-password', {
+        templateUrl: '/template/forgot-password.html',
+        controller: 'ForgotPasswordController'
     }).otherwise({
         redirectTo: '/login',
         controller: 'LoginController',
-        templateUrl: '/template/login.html',});
+        templateUrl: '/template/login.html',
+    });
 });
+
+app.run(function ($rootScope) {
+    $rootScope.$on('$routeChangeStart', function () {
+        if (typeof $rootScope.stompClient !== 'undefined' && $rootScope.stompClient !== null) {
+            $rootScope.stompClient.disconnect();
+            $rootScope.stompClient = null;
+        }
+    });
+
+    $rootScope.closeAlert = function () {
+        closeAlert();
+    };
+})

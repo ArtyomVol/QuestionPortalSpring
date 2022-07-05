@@ -61,4 +61,14 @@ public class Question {
         this.answerOptions = answerOptions;
         this.answer = answer;
     }
+
+    public Question(Long id, User forUser, String questionText, AnswerType answerType, String answerOptions,
+                    String answer) {
+        this.id = id;
+        this.forUser = forUser;
+        this.questionText = questionText;
+        this.answerType = answerType;
+        this.answerOptions = answerOptions;
+        this.answer = answer;
+    }
 }

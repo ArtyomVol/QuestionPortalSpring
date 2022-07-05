@@ -16,31 +16,31 @@ import java.util.List;
 
 @Component
 public class UserRestService {
-    private static UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserRestService(UserService userService) {
-        UserRestService.userService = userService;
+        this.userService = userService;
     }
 
-    public static ResponseEntity<?> signIn(UserRegistrationDto user) {
+    public ResponseEntity<Message> signIn(UserRegistrationDto user) {
         userService.createUser(user);
         return new ResponseEntity<>(new Message("Registration success"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> logIn(UserLoginDto userData, HttpServletRequest request) {
+    public ResponseEntity<Message> logIn(UserLoginDto userData, HttpServletRequest request) {
         User user = userService.getUserByEmailAndPassword(userData.getEmail(), userData.getPassword());
         request.getSession().setAttribute("user", user);
         return new ResponseEntity<>(new Message("Login Success"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> changeUserData(@RequestBody UserUpdateDto userUpdateDto, HttpServletRequest request) {
+    public ResponseEntity<Message> changeUserData(@RequestBody UserUpdateDto userUpdateDto, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         userService.changeUserData(user, userUpdateDto);
         return new ResponseEntity<>(new Message("User data successfully changed"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> deleteUserWithPasswordCheck(@RequestBody String password,
+    public ResponseEntity<Message> deleteUserWithPasswordCheck(@RequestBody String password,
                                                                 HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         password = password.substring(1, password.length() - 1);
@@ -49,20 +49,35 @@ public class UserRestService {
         return new ResponseEntity<>(new Message("User successfully deleted"), HttpStatus.IM_USED);
     }
 
-    public static ResponseEntity<?> logOut(HttpServletRequest request) {
+    public ResponseEntity<Message> logOut(HttpServletRequest request) {
         request.getSession().setAttribute("user", null);
         return new ResponseEntity<>(new Message("Logout success"), HttpStatus.IM_USED);
     }
 
-    public static ResponseEntity<?> getUserFromSession(HttpServletRequest request) {
+    public ResponseEntity<UserSessionDto> getUserFromSession(HttpServletRequest request) {
         User userEntity = (User) request.getSession().getAttribute("user");
         UserSessionDto user = UserMapper.userEntityToUserSessionDto(userEntity);
         return new ResponseEntity<>(user, HttpStatus.IM_USED);
     }
 
-    public static ResponseEntity<?> getAllOtherUsers(HttpServletRequest request) {
+    public ResponseEntity<List<UserOnlyEmailDto>> getAllOtherUsers(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute("user");
         List<UserOnlyEmailDto> otherUsers = userService.getAllOtherUsers(currentUser);
         return new ResponseEntity<>(otherUsers, HttpStatus.IM_USED);
+    }
+
+    public ResponseEntity<Message> sendConfirmationCode(String userEmail, HttpServletRequest request) {
+        String confirmationCode = userService.sendConfirmationCode(userEmail);
+        request.getSession().setAttribute("confirmationCode", confirmationCode);
+        return new ResponseEntity<>(new Message("Mail with confirmation code is send for your email."),
+                HttpStatus.IM_USED);
+    }
+
+    public ResponseEntity<Message> changePassword(UserConfirmationCodeDto user,
+                                                  HttpServletRequest request) {
+        String realConfirmationCode = (String) request.getSession().getAttribute("confirmationCode");
+        userService.changePassword(user, realConfirmationCode);
+        return new ResponseEntity<>(new Message("Password is successfully changed."),
+                HttpStatus.IM_USED);
     }
 }

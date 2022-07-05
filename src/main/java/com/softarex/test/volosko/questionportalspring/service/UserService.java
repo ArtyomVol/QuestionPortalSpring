@@ -2,12 +2,18 @@ package com.softarex.test.volosko.questionportalspring.service;
 
 import com.softarex.test.volosko.questionportalspring.entity.User;
 import com.softarex.test.volosko.questionportalspring.entity.dto.EmailDto;
+import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserConfirmationCodeDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserOnlyEmailDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserRegistrationDto;
 import com.softarex.test.volosko.questionportalspring.entity.dto.user.UserUpdateDto;
 import com.softarex.test.volosko.questionportalspring.exception.*;
+import com.softarex.test.volosko.questionportalspring.exception.login.UserIsMissingException;
+import com.softarex.test.volosko.questionportalspring.exception.login.UserLoginException;
+import com.softarex.test.volosko.questionportalspring.exception.registration.InvalidMailFormatException;
+import com.softarex.test.volosko.questionportalspring.exception.registration.UserAlreadyExistsException;
 import com.softarex.test.volosko.questionportalspring.mapper.UserMapper;
 import com.softarex.test.volosko.questionportalspring.repository.UserRepository;
+import com.softarex.test.volosko.questionportalspring.util.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,11 +24,13 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final JavaMailSender javaMailSender;
+    private final PasswordGenerator passwordGenerator = new PasswordGenerator();
 
     @Autowired
     public UserService(UserRepository userRepository, JavaMailSenderImpl javaMailSenderImpl) {
@@ -44,7 +52,6 @@ public class UserService {
             try {
                 javaMailSender.send(simpleMailMessage);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new InvalidMailFormatException(userDto.getEmail());
             }
             userDto.setPassword((encryptPassword(userDto.getPassword())));
@@ -102,6 +109,39 @@ public class UserService {
 
     private String encryptPassword(String password) {
         return DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String sendConfirmationCode(String userEmail) {
+        Optional<User> user = userRepository.findByEmail(userEmail);
+        if (user.isPresent()){
+            String confirmationCode = passwordGenerator.generateRandomPassword();
+            EmailDto emailDTO = new EmailDto(userEmail);
+            SimpleMailMessage simpleMailMessage = emailDTO.initializePasswordChangeMail(confirmationCode);
+            try {
+                javaMailSender.send(simpleMailMessage);
+            } catch (Exception e) {
+                throw new InvalidMailFormatException(userEmail);
+            }
+            return confirmationCode;
+        }
+        else {
+            throw new UserIsMissingException(userEmail);
+        }
+    }
+
+    public void changePassword(UserConfirmationCodeDto userDto, String realConfirmationCode) {
+        if (realConfirmationCode.equals(userDto.getConfirmationCode())) {
+            Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+            if (user.isPresent()) {
+                user.get().setPassword(encryptPassword(userDto.getNewPassword()));
+                userRepository.save(user.get());
+            } else {
+                throw new UserIsMissingException(userDto.getEmail());
+            }
+        }
+        else {
+            throw new WrongConfirmationCodeException();
+        }
     }
 
 }

@@ -14,20 +14,26 @@ import java.util.List;
 
 @Component
 public class QuestionRestService {
-    private static QuestionService questionService;
+    private final QuestionService questionService;
 
     @Autowired
     public QuestionRestService(QuestionService questionService) {
-        QuestionRestService.questionService = questionService;
+        this.questionService = questionService;
     }
 
-    public static ResponseEntity<List<?>> getAllQuestionsFromSessionUser(HttpServletRequest request) {
+    public ResponseEntity<List<QuestionDto>> getAllQuestionsFromSessionUser(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         List<QuestionDto> questions = questionService.getQuestionsByFromUser(user);
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
-    public static ResponseEntity<List<?>> getQuestionsFromSessionUser(
+    public ResponseEntity<List<QuestionDto>> getAllQuestionsForSessionUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        List<QuestionDto> questions = questionService.getQuestionsByForUser(user);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<QuestionDto>> getQuestionsFromSessionUser(
             int questionsPerPage, int pageNum, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         List<QuestionDto> questions = questionService.getQuestionsByFromUserWithPagination(
@@ -35,24 +41,47 @@ public class QuestionRestService {
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
-    public static ResponseEntity<?> createQuestion(QuestionDto question) {
-        questionService.createQuestion(question);
+    public ResponseEntity<List<QuestionDto>> getQuestionsForSessionUser(
+            int questionsPerPage, int pageNum, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        List<QuestionDto> questions = questionService.getQuestionsByForUserWithPagination(
+                user, questionsPerPage, pageNum);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Message> createQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.createQuestion(question, user);
         return new ResponseEntity<>(new Message("Question is successfully created"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> deleteQuestion(long id) {
-        questionService.deleteQuestionById(id);
+    public ResponseEntity<Message> deleteQuestion(long id, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.deleteQuestionById(id, user);
         return new ResponseEntity<>(new Message("Question is successfully deleted"), HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<?> getCountOfQuestionsFromSessionUser(HttpServletRequest request) {
+    public ResponseEntity<Integer> getCountOfQuestionsFromSessionUser(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         int questionsCount = questionService.getQuestionsByFromUserCount(user);
         return new ResponseEntity<>(questionsCount, HttpStatus.OK);
     }
 
-    public static ResponseEntity<?> editQuestion(QuestionDto question) {
-        questionService.editQuestion(question);
+    public ResponseEntity<Integer> getCountOfQuestionsForSessionUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        int questionsCount = questionService.getQuestionsByForUserCount(user);
+        return new ResponseEntity<>(questionsCount, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Message> editQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.editQuestion(question, user);
         return new ResponseEntity<>(new Message("Question is successfully edited"), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<Message> answerQuestion(QuestionDto question, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        questionService.answerQuestion(question, user);
+        return new ResponseEntity<>(new Message("Question is successfully answered"), HttpStatus.CREATED);
     }
 }

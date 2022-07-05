@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-question
+      author: ArtyomVolosko
+      changes:
+        - createTable:
+            tableName: question
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: from_user
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_question_from_user
+                    references: user(id)
+                    nullable: false
+              - column:
+                  name: for_user
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_question_for_user
+                    references: user(id)
+                    nullable: false
+              - column:
+                  name: question_text
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: answer_type_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_question_answer_type
+                    references: answer_type(id)
+                    nullable: false
+              - column:
+                  name: answer_options
+                  type: varchar(100)
+              - column:
+                  name: answer
+                  type: varchar(100)
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            tableName: question
+            generationType: ALWAYS
+            incrementBy: 1
+            schemaName: public
+            startWith: 1
+            startValue: 1

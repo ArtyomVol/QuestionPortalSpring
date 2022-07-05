@@ -1,0 +1,63 @@
+<title>Edit Profile</title>
+<link rel="stylesheet" href="/css/my-dropdown.css">
+<nav class="row bg-white sticky-top ng-scope header">
+    <div class="col-1 header-logotype">
+        <h4 class="padding-0"><b>LOGO<span class="color-steelblue">TYPE</span></b></h4>
+    </div>
+    <div class="row header-right-elements">
+        <a href="#!/questions/your" class="col-1 header-your-questions">
+            Your questions</a>
+        <a href="#!/questions/answer" class="col-1 header-answer-the-questions">
+            Answer the question</a>
+        <div class="col-1 my-dropdown header-username">
+            <a class="dropa" id="f_l_name">Loading...</a>
+            <div class="my-dropdown-content">
+                <a href="#!/profile/edit">Edit Profile</a>
+                <a href="#!/profile/delete">Delete Profile</a>
+                <a href="#" ng-click="logout()">Log Out</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid ng-scope">
+    <div class="row background-color-fafafa">
+        <div class="card mt-3 central-window padding-0">
+            <div class="row padding-4-per">
+                <h4 class="mb-0">Edit Profile</h4>
+            </div>
+            <hr class="mt-0 mb-0">
+            <div class="row order-md-1 padding-2-per">
+                <form ng-submit="changeUser()">
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 h6 color-darkgray">First Name</p>
+                        <input type="text" class="form-control field" ng-model="user.firstName">
+                    </div>
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 color-darkgray h6">Last Name</p>
+                        <input type="text" class="form-control field"
+                               ng-model="user.lastName">
+                    </div>
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 color-darkgray h6">Email <span class="color-darkred">*</span></p>
+                        <input type="email" required class="form-control field" ng-model="user.email">
+                    </div>
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 color-darkgray h6">Phone Number</p>
+                        <input type="text" class="form-control field" ng-model="user.phoneNumber">
+                    </div>
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 color-darkgray h6">Current Password <span class="color-darkred">*</span></p>
+                        <input type="password" required class="form-control field" ng-model="user.password">
+                    </div>
+                    <div class="mb-2 ms-4 me-4">
+                        <p class="mb-1 color-darkgray h6">New password</p>
+                        <input type="password" class="form-control field" ng-model="user.newPassword">
+                    </div>
+                    <button class="ms-4 mb-3 btn btn-lg btn-primary btn-block edit-profile-btn" type="submit">SAVE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

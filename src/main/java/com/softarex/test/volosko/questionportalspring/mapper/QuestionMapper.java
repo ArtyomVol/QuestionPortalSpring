@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QuestionMapper {
-    private static AnswerTypeService answerTypeService;
-    private static UserService userService;
+    private final AnswerTypeService answerTypeService;
+    private final UserService userService;
 
     @Autowired
     public QuestionMapper(AnswerTypeService answerTypeService, UserService userService) {
-        QuestionMapper.answerTypeService = answerTypeService;
-        QuestionMapper.userService = userService;
+        this.answerTypeService = answerTypeService;
+        this.userService = userService;
     }
 
-    public static Question questionDtoToEntityWithId(QuestionDto questionDto) {
+    public Question questionDtoToEntityWithId(QuestionDto questionDto) {
         AnswerType answerType = answerTypeService.getAnswerTypeByType(questionDto.getAnswerType().getType());
         User fromUser = userService.getUserByEmail(questionDto.getFromUser().getEmail());
         User forUser = userService.getUserByEmail(questionDto.getForUser().getEmail());
@@ -28,7 +28,7 @@ public class QuestionMapper {
                 questionDto.getAnswerOptions(), questionDto.getAnswer());
     }
 
-    public static Question questionDtoToEntityWithoutId(QuestionDto questionDto) {
+    public Question questionDtoToEntityWithoutId(QuestionDto questionDto) {
         AnswerType answerType = answerTypeService.getAnswerTypeByType(questionDto.getAnswerType().getType());
         User fromUser = userService.getUserByEmail(questionDto.getFromUser().getEmail());
         User forUser = userService.getUserByEmail(questionDto.getForUser().getEmail());
@@ -36,7 +36,7 @@ public class QuestionMapper {
                 questionDto.getAnswerOptions(), questionDto.getAnswer());
     }
 
-    public static QuestionDto questionEntityToDto(Question question) {
+    public QuestionDto questionEntityToDto(Question question) {
         return new QuestionDto(
                 question.getId(),
                 UserMapper.userEntityToUserSessionDto(question.getFromUser()),

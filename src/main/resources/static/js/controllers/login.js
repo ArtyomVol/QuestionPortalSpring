@@ -3,13 +3,6 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
     $scope.user = {
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        phoneNumber: ""
-    };
-
-    $scope.errorMessage = {
-        message: ""
     };
 
     pageLoad();
@@ -32,11 +25,10 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
                     $cookies.put('remember', 'no');
                     $cookies.remove('email');
                 }
-                window.location = "/#!/your_questions";
+                window.location = "/#!/questions/your";
             },
             function (response) {
-                $scope.errorMessage = response.data;
-                alert($scope.errorMessage.message);
+                alertModify(response.data.message, "Error");
                 clearFormData();
             }
         );
@@ -49,14 +41,14 @@ app.controller("LoginController", function ($scope, $http, $cookies) {
     function pageLoad() {
         $http({
             method: 'GET',
-            url: '/api/v1/users/get-user-from-session',
+            url: '/api/v1/users/from/session',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(
             function (response) {
                 if (response.data) {
-                    window.location = "/#!/your_questions";
+                    window.location = "/#!/questions/your";
                 }
                 if ($cookies.get('remember') === 'yes') {
                     $scope.user.email = $cookies.get('email');

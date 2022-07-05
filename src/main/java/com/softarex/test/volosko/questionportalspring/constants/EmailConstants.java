@@ -9,8 +9,12 @@ public final class EmailConstants {
     public static final String PROFILE_DELETING_MESSAGE =
             "Thank you for your time with us. Your account on the LOGOTYPE website has been successfully deleted.";
     public static final String PROFILE_DELETING_SUBJECT = "Profile deleting";
+    public static final String PASSWORD_CHANGE_MESSAGE =
+            "Someone wants to change your password. If this is not you, ignore this message. Otherwise, here is a " +
+                    "confirmation code that cannot be shared with anyone: §1§.";
+    public static final String PASSWORD_CHANGE_SUBJECT = "Password change";
+
 
     private EmailConstants() {
     }
-
 }

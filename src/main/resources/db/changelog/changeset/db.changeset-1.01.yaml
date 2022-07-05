@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-answer-type
+      author: ArtyomVolosko
+      changes:
+        - createTable:
+            tableName: answer_type
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(20)
+                  constraints:
+                    unique: true
+                    nullable: false
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            tableName: answer_type
+            generationType: ALWAYS
+            incrementBy: 1
+            schemaName: public
+            startWith: 1
+            startValue: 1
+        - sql:
+            sql: INSERT INTO answer_type (id, "type") VALUES(1, 'Single line text'), (2,'Multiline text'), (3,'Radio button'), (4,'Check box'), (5,'Combo box'), (6,'Date')
