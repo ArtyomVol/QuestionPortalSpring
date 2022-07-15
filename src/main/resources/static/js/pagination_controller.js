@@ -150,10 +150,12 @@ class Pagination_controller {
         }
         let pagesCount = Math.ceil(questionsCount / questionsPerPage);
         if (questionsCount === 0) {
+            currentPage.style.display = "none";
             modifyPaginationIfQuestionsCountIsZero(previousPageParent, nextPageParent, firstPage, pagesBefore,
                 pageBeforeBefore, pageBefore, currentPage, pageAfter, pageAfterAfter, pagesAfter, lastPage);
             pagesNums.currentPage = 1;
         } else {
+            currentPage.style.display = "block";
             setPaginationNums(buttonId, pagesCount, pagesNums);
             previousAndAfterPaginationModifying(previousPageParent, previousPage, firstPage, pagesBefore, pageBeforeBefore,
                 pageBefore, currentPage, pageAfter, pageAfterAfter, pagesAfter, lastPage,
