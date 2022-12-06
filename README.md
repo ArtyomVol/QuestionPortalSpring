@@ -6,7 +6,7 @@ ___
 
 * Java 8
 * Maven
-* Spring boot + Spring MVC
+* Spring boot
 * JPA, Spring data, Hibernate
 * DB: PostgreSQL
 * AngularJS
@@ -27,7 +27,7 @@ ___
 
 ## How to run
 
-### First, you can just open [Heroku](https://question-portal-spring.herokuapp.com/) =)
+### First, you can just open [Heroku](https://question-portal-spring.herokuapp.com/)... But after November 2022 the link will not work =(
 
 To run the application, you need to:
 
