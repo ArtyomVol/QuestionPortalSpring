@@ -1,0 +1,22 @@
+version: "0.9"
+services:
+  question_portal_spring_app_db:
+    image: postgres:12
+    container_name: "question_portal_spring_app_db"
+    restart: on-failure
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_DB: question_portal_spring_app_db
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  question_portal_spring_app:
+    build: ./
+    container_name: "question_portal_spring_app"
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    depends_on:
+      - question_portal_spring_app_db
